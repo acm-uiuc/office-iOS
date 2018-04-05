@@ -15,6 +15,7 @@ struct ACMConcertStatus: Decodable {
     let currentTime: Int?
     let duration: Int?
     let currentTrack: String?
+    let thumbnail: String?
 
     enum CodingKeys: String, CodingKey {
         case audioStatus = "audio_status"
@@ -23,5 +24,6 @@ struct ACMConcertStatus: Decodable {
         case currentTime = "current_time"
         case duration
         case currentTrack = "current_track"
+        case thumbnail
     }
 }

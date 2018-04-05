@@ -133,14 +133,14 @@
                                         <rect key="frame" x="33.666666666666657" y="0.0" width="268" height="298"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Cjn-G3-Ghg">
-                                                <rect key="frame" x="0.0" y="0.0" width="268" height="268"/>
+                                                <rect key="frame" x="0.33333333333331439" y="0.0" width="268" height="268"/>
                                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="Cjn-G3-Ghg" secondAttribute="height" id="uE2-lW-bp5"/>
                                                 </constraints>
                                             </imageView>
                                             <slider opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="i5Z-ip-m17">
-                                                <rect key="frame" x="-2" y="268" width="272" height="31"/>
+                                                <rect key="frame" x="-1.6666666666666856" y="268" width="272" height="31"/>
                                                 <color key="tintColor" red="0.8520639539" green="0.19078093269999999" blue="0.54865840170000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                             </slider>
                                         </subviews>
@@ -218,6 +218,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Concert" id="IM7-q3-qMO"/>
                     <connections>
+                        <outlet property="artworkImageView" destination="Cjn-G3-Ghg" id="Tv4-td-34O"/>
                         <outlet property="infoLabel" destination="XLZ-DE-T2Q" id="izP-b3-s0V"/>
                         <outlet property="playPauseButton" destination="dg6-l7-MjS" id="wI8-uO-hgX"/>
                         <outlet property="progressSlider" destination="i5Z-ip-m17" id="PYM-02-1Pl"/>

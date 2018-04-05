@@ -9,6 +9,7 @@
 import UIKit
 import SocketIO
 import MarqueeLabel
+import UIImageColors
 
 final class ACMConcertPlayerViewController: UIViewController {
     @IBOutlet weak var artworkImageView: UIImageView!
@@ -17,12 +18,17 @@ final class ACMConcertPlayerViewController: UIViewController {
     @IBOutlet weak var volumeSilder: UISlider!
     @IBOutlet weak var playPauseButton: UIButton!
 
-    let socketManger = SocketManager(socketURL: URL(string: "http://172.20.10.9:5000")!)
+    let socketManger = SocketManager(socketURL: URL(string: "http://concert.acm.illinois.edu")!)
     let jsonDecoder = JSONDecoder()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configureSocket()
+
+        artworkImageView.contentMode = .scaleAspectFill
+        artworkImageView.clipsToBounds = true
+        artworkImageView.layer.masksToBounds = true
+        
         infoLabel.animationDelay = 2
         infoLabel.trailingBuffer = 24
         infoLabel.fadeLength = 16
@@ -85,6 +91,7 @@ final class ACMConcertPlayerViewController: UIViewController {
 
     // MARK: Handlers
     func handleUpdate(dataArray: [Any], ack: SocketAckEmitter) {
+
         guard let jsonString = dataArray.first as? String,
             let jsonData = jsonString.data(using: .utf8),
             let status = try? jsonDecoder.decode(ACMConcertStatus.self, from: jsonData) else { return }
@@ -110,5 +117,30 @@ final class ACMConcertPlayerViewController: UIViewController {
             let image = displayIsPlaying ? #imageLiteral(resourceName: "pause") : #imageLiteral(resourceName: "play")
             playPauseButton.setImage(image, for: .normal)
         }
+
+        if let thumbnail = status.thumbnail,
+            let url = URL(string: "http://concert.acm.illinois.edu/" + thumbnail) {
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let data = data,
+                    let image = UIImage(data: data) {
+                    let colors = image.getColors()
+                    DispatchQueue.main.async { [weak self] in
+                        self?.updateArtwork(with: image)
+                        self?.updateColors(with: colors)
+                    }
+                }
+            }.resume()
+        } else {
+            updateArtwork(with: nil)
+            updateColors(with: nil)
+        }
+    }
+
+    func updateArtwork(with image: UIImage?) {
+        artworkImageView.image = image
+    }
+
+    func updateColors(with colors: UIImageColors?) {
+        view.backgroundColor = colors?.background ?? UIColor.white
     }
 }
