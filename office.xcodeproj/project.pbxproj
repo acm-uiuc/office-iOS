@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3556965B207DD585004F1553 /* GrootSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3556965A207DD585004F1553 /* GrootSecrets.swift */; };
 		951D8A492030D8D9003AD47E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951D8A482030D8D9003AD47E /* AppDelegate.swift */; };
 		951D8A4E2030D8D9003AD47E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 951D8A4C2030D8D9003AD47E /* Main.storyboard */; };
 		951D8A502030D8D9003AD47E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 951D8A4F2030D8D9003AD47E /* Assets.xcassets */; };
 		951D8A532030D8D9003AD47E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 951D8A512030D8D9003AD47E /* LaunchScreen.storyboard */; };
-		951D8A5E2030DABE003AD47E /* GrootSerivce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951D8A5D2030DABE003AD47E /* GrootSerivce.swift */; };
+		951D8A5E2030DABE003AD47E /* GrootService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951D8A5D2030DABE003AD47E /* GrootService.swift */; };
 		951D8A612030DD6C003AD47E /* ACMLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951D8A602030DD6C003AD47E /* ACMLoginViewController.swift */; };
 		951D8A632030DDEA003AD47E /* ACMBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951D8A622030DDEA003AD47E /* ACMBaseViewController.swift */; };
-		95CA1BFD205AFD160086C126 /* GrootSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CA1BFC205AFD160086C126 /* GrootSecrets.swift */; };
 		95FD06DD2030E11F00123388 /* ACMApplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FD06DC2030E11F00123388 /* ACMApplicationController.swift */; };
 		95FD06DF2030EE8800123388 /* ACMConcertPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FD06DE2030EE8800123388 /* ACMConcertPlayerViewController.swift */; };
 		95FD06E12031014700123388 /* ACMConcertStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FD06E02031014700123388 /* ACMConcertStatus.swift */; };
@@ -24,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3556965A207DD585004F1553 /* GrootSecrets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GrootSecrets.swift; sourceTree = "<group>"; };
 		42F27291C350E7ED2D51E2A6 /* Pods-office.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-office.release.xcconfig"; path = "Pods/Target Support Files/Pods-office/Pods-office.release.xcconfig"; sourceTree = "<group>"; };
 		8A7B952881A9F5DDFF6AAFFF /* Pods_office.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_office.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		951D8A452030D8D9003AD47E /* office.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = office.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -32,10 +33,9 @@
 		951D8A4F2030D8D9003AD47E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		951D8A522030D8D9003AD47E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		951D8A542030D8D9003AD47E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		951D8A5D2030DABE003AD47E /* GrootSerivce.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GrootSerivce.swift; sourceTree = "<group>"; };
+		951D8A5D2030DABE003AD47E /* GrootService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GrootService.swift; sourceTree = "<group>"; };
 		951D8A602030DD6C003AD47E /* ACMLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACMLoginViewController.swift; sourceTree = "<group>"; };
 		951D8A622030DDEA003AD47E /* ACMBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACMBaseViewController.swift; sourceTree = "<group>"; };
-		95CA1BFC205AFD160086C126 /* GrootSecrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrootSecrets.swift; sourceTree = "<group>"; };
 		95FD06DC2030E11F00123388 /* ACMApplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACMApplicationController.swift; sourceTree = "<group>"; };
 		95FD06DE2030EE8800123388 /* ACMConcertPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACMConcertPlayerViewController.swift; sourceTree = "<group>"; };
 		95FD06E02031014700123388 /* ACMConcertStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACMConcertStatus.swift; sourceTree = "<group>"; };
@@ -102,8 +102,8 @@
 		951D8A5C2030DABE003AD47E /* APIServices */ = {
 			isa = PBXGroup;
 			children = (
-				951D8A5D2030DABE003AD47E /* GrootSerivce.swift */,
-				95CA1BFC205AFD160086C126 /* GrootSecrets.swift */,
+				951D8A5D2030DABE003AD47E /* GrootService.swift */,
+				3556965A207DD585004F1553 /* GrootSecrets.swift */,
 			);
 			path = APIServices;
 			sourceTree = "<group>";
@@ -232,18 +232,18 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-office/Pods-office-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/APIManager/APIManager.framework",
+				"${BUILT_PRODUCTS_DIR}/ChameleonFramework/ChameleonFramework.framework",
 				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
-				"${BUILT_PRODUCTS_DIR}/UIImageColors/UIImageColors.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/APIManager.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChameleonFramework.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIImageColors.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -260,13 +260,13 @@
 				95FD06E320310E1100123388 /* ACMConcertVolume.swift in Sources */,
 				95FD06DF2030EE8800123388 /* ACMConcertPlayerViewController.swift in Sources */,
 				951D8A612030DD6C003AD47E /* ACMLoginViewController.swift in Sources */,
-				951D8A5E2030DABE003AD47E /* GrootSerivce.swift in Sources */,
+				951D8A5E2030DABE003AD47E /* GrootService.swift in Sources */,
 				951D8A492030D8D9003AD47E /* AppDelegate.swift in Sources */,
 				95FD06DD2030E11F00123388 /* ACMApplicationController.swift in Sources */,
 				951D8A632030DDEA003AD47E /* ACMBaseViewController.swift in Sources */,
 				95FD06E52031264E00123388 /* ACMConcertPlayState.swift in Sources */,
 				95FD06E12031014700123388 /* ACMConcertStatus.swift in Sources */,
-				95CA1BFD205AFD160086C126 /* GrootSecrets.swift in Sources */,
+				3556965B207DD585004F1553 /* GrootSecrets.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

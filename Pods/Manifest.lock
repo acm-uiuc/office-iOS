@@ -1,25 +1,27 @@
 PODS:
   - APIManager (0.2.0)
+  - ChameleonFramework (2.1.0):
+    - ChameleonFramework/Default (= 2.1.0)
+  - ChameleonFramework/Default (2.1.0)
   - MarqueeLabel (3.1.4):
     - MarqueeLabel/ObjC (= 3.1.4)
   - MarqueeLabel/ObjC (3.1.4)
   - Socket.IO-Client-Swift (13.1.0):
     - Starscream (~> 3.0.2)
   - Starscream (3.0.3)
-  - UIImageColors (2.0.0)
 
 DEPENDENCIES:
   - APIManager (from `https://github.com/rauhul/api-manager.git`, commit `75e517645ed0bde8cec80ddcb6223e85b9810e61`)
+  - ChameleonFramework
   - MarqueeLabel
   - Socket.IO-Client-Swift (~> 13.1.0)
-  - UIImageColors (~> 2.0)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
+    - ChameleonFramework
     - MarqueeLabel
     - Socket.IO-Client-Swift
     - Starscream
-    - UIImageColors
 
 EXTERNAL SOURCES:
   APIManager:
@@ -33,11 +35,11 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   APIManager: 505550b6d705c44c58a30ac36f4de8277b5745e5
+  ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
   MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
   Socket.IO-Client-Swift: b67a96d6a9e5f271bceb93e99779d2cf77c74868
   Starscream: dfb1b3f39506717ee52b67fb48de0c8269504cbc
-  UIImageColors: 3ae0150e539342697808281a3975fe5dec2024ce
 
-PODFILE CHECKSUM: ed4f68a8d8e0b154a183c60e9d7ed46a3fefd1b7
+PODFILE CHECKSUM: bc1a28480f5212053fc162ba4d2b7abb584377a4
 
 COCOAPODS: 1.5.0
