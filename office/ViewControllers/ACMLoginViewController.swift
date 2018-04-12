@@ -32,7 +32,7 @@ class ACMLoginViewController: ACMBaseViewController {
     }
 
     // MARK: - Next Responder
-    override func nextReponder(current: UIResponder) -> UIResponder? {
+    override func nextResponder(current: UIResponder) -> UIResponder? {
         switch current {
         case netIDField:
             return passwordField
@@ -82,7 +82,7 @@ class ACMLoginViewController: ACMBaseViewController {
         loginButton.isEnabled = false
         loginButton.alpha     = 0.5
 
-        GrootSessionService.createSessionFor(user: netID, withPassword: password)
+        ConcertSessionService.createSessionFor(user: netID, withPassword: password)
         .onCompletion { result in
             switch result {
             case .success(let session):
