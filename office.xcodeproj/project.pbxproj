@@ -15,6 +15,7 @@
 		951D8A5E2030DABE003AD47E /* GrootService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951D8A5D2030DABE003AD47E /* GrootService.swift */; };
 		951D8A612030DD6C003AD47E /* ACMLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951D8A602030DD6C003AD47E /* ACMLoginViewController.swift */; };
 		951D8A632030DDEA003AD47E /* ACMBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951D8A622030DDEA003AD47E /* ACMBaseViewController.swift */; };
+		959BB655207EADB9000EA75C /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 959BB654207EADB9000EA75C /* UIImageExtensions.swift */; };
 		95FD06DD2030E11F00123388 /* ACMApplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FD06DC2030E11F00123388 /* ACMApplicationController.swift */; };
 		95FD06DF2030EE8800123388 /* ACMConcertPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FD06DE2030EE8800123388 /* ACMConcertPlayerViewController.swift */; };
 		95FD06E12031014700123388 /* ACMConcertStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FD06E02031014700123388 /* ACMConcertStatus.swift */; };
@@ -36,6 +37,7 @@
 		951D8A5D2030DABE003AD47E /* GrootService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GrootService.swift; sourceTree = "<group>"; };
 		951D8A602030DD6C003AD47E /* ACMLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACMLoginViewController.swift; sourceTree = "<group>"; };
 		951D8A622030DDEA003AD47E /* ACMBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACMBaseViewController.swift; sourceTree = "<group>"; };
+		959BB654207EADB9000EA75C /* UIImageExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtensions.swift; sourceTree = "<group>"; };
 		95FD06DC2030E11F00123388 /* ACMApplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACMApplicationController.swift; sourceTree = "<group>"; };
 		95FD06DE2030EE8800123388 /* ACMConcertPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACMConcertPlayerViewController.swift; sourceTree = "<group>"; };
 		95FD06E02031014700123388 /* ACMConcertStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACMConcertStatus.swift; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 				951D8A542030D8D9003AD47E /* Info.plist */,
 				95FD06DB2030E10300123388 /* ViewControllers */,
 				95FD06DC2030E11F00123388 /* ACMApplicationController.swift */,
+				959BB654207EADB9000EA75C /* UIImageExtensions.swift */,
 			);
 			path = office;
 			sourceTree = "<group>";
@@ -148,6 +151,7 @@
 				951D8A422030D8D9003AD47E /* Frameworks */,
 				951D8A432030D8D9003AD47E /* Resources */,
 				DDADF1357D7CFB7C38EC365F /* [CP] Embed Pods Frameworks */,
+				3A3AB2E42CBE33854150D434 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -206,6 +210,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		3A3AB2E42CBE33854150D434 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-office/Pods-office-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		528F1F7D2D1BC7B347F0F282 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -233,17 +252,21 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-office/Pods-office-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/APIManager/APIManager.framework",
 				"${BUILT_PRODUCTS_DIR}/ChameleonFramework/ChameleonFramework.framework",
+				"${BUILT_PRODUCTS_DIR}/GPUImage/GPUImage.framework",
 				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
+				"${BUILT_PRODUCTS_DIR}/YXWaveView/YXWaveView.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/APIManager.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChameleonFramework.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GPUImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YXWaveView.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -258,6 +281,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				95FD06E320310E1100123388 /* ACMConcertVolume.swift in Sources */,
+				959BB655207EADB9000EA75C /* UIImageExtensions.swift in Sources */,
 				95FD06DF2030EE8800123388 /* ACMConcertPlayerViewController.swift in Sources */,
 				951D8A612030DD6C003AD47E /* ACMLoginViewController.swift in Sources */,
 				951D8A5E2030DABE003AD47E /* GrootService.swift in Sources */,

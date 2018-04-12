@@ -10,11 +10,19 @@ import UIKit
 import SocketIO
 import MarqueeLabel
 import ChameleonFramework
+import YXWaveView
 
 final class ACMConcertPlayerViewController: UIViewController {
     @IBOutlet weak var artworkImageView: UIImageView!
+    @IBOutlet weak var artworkImageContainerView: UIView!
+    @IBOutlet weak var backgroundArtworkImageView: UIImageView!
+
+
+    @IBOutlet weak var waveView: YXWaveView!
+
+
     @IBOutlet weak var infoLabel: MarqueeLabel!
-    @IBOutlet weak var progressSlider: UISlider!
+    @IBOutlet weak var progressBar: UIProgressView!
     @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var playPauseButton: UIButton!
     @IBOutlet weak var skipButton: UIButton!
@@ -27,10 +35,25 @@ final class ACMConcertPlayerViewController: UIViewController {
         super.viewDidLoad()
         configureSocket()
 
+        waveView.realWaveColor = UIColor.white.withAlphaComponent(1)
+        waveView.maskWaveColor = UIColor.white.withAlphaComponent(0.3)
+        waveView.waveSpeed = 1.3
+        waveView.waveHeight = 12
+        waveView.waveCurvature = 1.2
+        waveView.start()
+
         artworkImageView.contentMode = .scaleAspectFill
         artworkImageView.clipsToBounds = true
+        artworkImageView.layer.cornerRadius = 20.0
         artworkImageView.layer.masksToBounds = true
-        
+
+        artworkImageContainerView.layer.shadowColor = UIColor.black.cgColor
+        artworkImageContainerView.layer.shadowOffset = .zero
+        artworkImageContainerView.layer.shadowRadius = 12.0
+        artworkImageContainerView.layer.shadowOpacity = 0.6
+        artworkImageContainerView.layer.masksToBounds = false
+        artworkImageContainerView.layer.shadowPath = UIBezierPath(roundedRect: artworkImageView.bounds, cornerRadius: artworkImageView.layer.cornerRadius).cgPath
+
         infoLabel.animationDelay = 2
         infoLabel.trailingBuffer = 24
         infoLabel.fadeLength = 16
@@ -40,8 +63,6 @@ final class ACMConcertPlayerViewController: UIViewController {
         volumeSlider.minimumValueImage = #imageLiteral(resourceName: "volumeLow")
         volumeSlider.maximumValueImage = #imageLiteral(resourceName: "volumeHigh")
         volumeSlider.tintColor = UIColor.gray
-
-        progressSlider.setThumbImage(UIImage(), for: .normal)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -71,8 +92,8 @@ final class ACMConcertPlayerViewController: UIViewController {
         socketManger.defaultSocket.on("connected", callback: handleConnection)
         socketManger.defaultSocket.on("skipped", callback: handleConnection)
         socketManger.defaultSocket.on("volume_changed", callback: handleVolume)
-        socketManger.defaultSocket.on("pause", callback: handlePause)
-        socketManger.defaultSocket.on("play", callback: handlePlay)
+        socketManger.defaultSocket.on("paused", callback: handlePause)
+        socketManger.defaultSocket.on("played", callback: handlePlay)
     }
 
     @objc func setupSocket() {
@@ -158,20 +179,22 @@ final class ACMConcertPlayerViewController: UIViewController {
         DispatchQueue.global(qos: .userInitiated).async {
             let url = URL(string: "http://concert.acm.illinois.edu/" + artworkUrl)
             URLSession.shared.dataTask(with: url!) { data, response, error in
-                if let data = data,
-                let image = UIImage(data: data) {
-                    let colors = NSArray(ofColorsFrom: image, withFlatScheme: false) as! [UIColor]
-                    DispatchQueue.main.async { [weak self] in
-                        self?.updateArtwork(with: image)
-                        self?.updateColors(with: colors)
-                    }
+                guard let data = data else { return }
+
+                let image = UIImage(data: data)
+                let blurredImage = image?.blur(radius: 0.6)
+                let colors = NSArray(ofColorsFrom: image, withFlatScheme: false) as! [UIColor]
+
+                DispatchQueue.main.async { [weak self] in
+                    self?.update(artworkImage: image, withBlurredArtworkImage: blurredImage)
+                    self?.updateColors(with: colors)
                 }
             }.resume()
         }
     }
     
     func updateProgress(with progress: Int, until duration: Int) {
-        progressSlider.setValue(Float(progress / duration), animated: false)
+//        progressBar.progress = Float(progress / duration)
     }
     
     func updateInfoLabel(with title: String) {
@@ -187,17 +210,18 @@ final class ACMConcertPlayerViewController: UIViewController {
         self.volumeSlider.value = Float(slider)
     }
 
-    func updateArtwork(with image: UIImage?) {
-        artworkImageView.image = image
+    func update(artworkImage: UIImage?, withBlurredArtworkImage blurredArtworkImage: UIImage?) {
+        artworkImageView.image = artworkImage
+        backgroundArtworkImageView.image = blurredArtworkImage
     }
 
     func updateColors(with colors: [UIColor]?) {
-        view.backgroundColor = colors?[4] ?? UIColor.white
-        infoLabel.textColor = colors?[1]
-        progressSlider.tintColor = colors?[2]
+        infoLabel.textColor = colors?[0]
+        progressBar.tintColor = colors?[4]
+        volumeSlider.tintColor = colors?[4]
         
-        playPauseButton.tintColor = colors?[1]
-        skipButton.tintColor = colors?[1]
-        viewQueueButton.tintColor = colors?[1]
+        playPauseButton.tintColor = colors?[2]
+        skipButton.tintColor = colors?[2]
+        viewQueueButton.tintColor = colors?[2]
     }
 }
