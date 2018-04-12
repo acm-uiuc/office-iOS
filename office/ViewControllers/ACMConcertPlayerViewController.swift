@@ -28,7 +28,7 @@ final class ACMConcertPlayerViewController: UIViewController {
     @IBOutlet weak var skipButton: UIButton!
     @IBOutlet weak var viewQueueButton: UIButton!
 
-    let socketManger = SocketManager(socketURL: URL(string: "http://concert.acm.illinois.edu")!)
+    let socketManager = SocketManager(socketURL: URL(string: "http://concert.acm.illinois.edu")!)
     let jsonDecoder = JSONDecoder()
 
     override func viewDidLoad() {
@@ -89,30 +89,30 @@ final class ACMConcertPlayerViewController: UIViewController {
 
     // MARK: Socket Init
     func configureSocket() {
-        socketManger.defaultSocket.on("connected",      callback: handleConnection)
-        socketManger.defaultSocket.on("heartbeat",      callback: handleConnection)
-        socketManger.defaultSocket.on("skipped",        callback: handleConnection)
-        socketManger.defaultSocket.on("volume_changed", callback: handleVolume)
-        socketManger.defaultSocket.on("paused",         callback: handlePause)
-        socketManger.defaultSocket.on("played",         callback: handlePlay)
+        socketManager.defaultSocket.on("connected",      callback: handleConnection)
+        socketManager.defaultSocket.on("heartbeat",      callback: handleConnection)
+        socketManager.defaultSocket.on("skipped",        callback: handleConnection)
+        socketManager.defaultSocket.on("volume_changed", callback: handleVolume)
+        socketManager.defaultSocket.on("paused",         callback: handlePause)
+        socketManager.defaultSocket.on("played",         callback: handlePlay)
     }
 
     @objc func setupSocket() {
-        socketManger.connect()
+        socketManager.connect()
     }
 
     @objc func teardownSocket() {
-        socketManger.disconnect()
+        socketManager.disconnect()
     }
 
     // MARK: Actions
     @IBAction func button() {
-        socketManger.defaultSocket.emit("pause")
+        socketManager.defaultSocket.emit("pause")
     }
 
     @IBAction func didChangeVolume() {
         let volume = Int(volumeSlider.value)
-        socketManger.defaultSocket.emit("volume", volume)
+        socketManager.defaultSocket.emit("volume", volume)
     }
 
     // MARK: Handlers
