@@ -89,11 +89,12 @@ final class ACMConcertPlayerViewController: UIViewController {
 
     // MARK: Socket Init
     func configureSocket() {
-        socketManger.defaultSocket.on("connected", callback: handleConnection)
-        socketManger.defaultSocket.on("skipped", callback: handleConnection)
+        socketManger.defaultSocket.on("connected",      callback: handleConnection)
+        socketManger.defaultSocket.on("heartbeat",      callback: handleConnection)
+        socketManger.defaultSocket.on("skipped",        callback: handleConnection)
         socketManger.defaultSocket.on("volume_changed", callback: handleVolume)
-        socketManger.defaultSocket.on("paused", callback: handlePause)
-        socketManger.defaultSocket.on("played", callback: handlePlay)
+        socketManger.defaultSocket.on("paused",         callback: handlePause)
+        socketManger.defaultSocket.on("played",         callback: handlePlay)
     }
 
     @objc func setupSocket() {
@@ -116,10 +117,13 @@ final class ACMConcertPlayerViewController: UIViewController {
 
     // MARK: Handlers
     func handleConnection(dataArray: [Any], ack: SocketAckEmitter) {
+        print("handle connection a")
 
         guard let jsonString = dataArray.first as? String,
             let jsonData = jsonString.data(using: .utf8),
             let status = try? jsonDecoder.decode(ACMConcertOnConnect.self, from: jsonData) else { return }
+
+        print("handle connection b")
 
         DispatchQueue.main.async { [weak self] in
             self?.updateVolume(with: status.volume)
@@ -131,11 +135,14 @@ final class ACMConcertPlayerViewController: UIViewController {
     }
     
     func handleVolume(dataArray: [Any], ack: SocketAckEmitter) {
-        
+        print("handle volume a")
+
         guard let jsonString = dataArray.first as? String,
             let jsonData = jsonString.data(using: .utf8),
             let status = try? jsonDecoder.decode(ACMConcertVolume.self, from: jsonData) else { return }
-        
+
+        print("handle volume b")
+
         let volume = status.volume
         
         DispatchQueue.main.async { [weak self] in
@@ -144,11 +151,14 @@ final class ACMConcertPlayerViewController: UIViewController {
     }
     
     func handlePause(dataArray: [Any], ack: SocketAckEmitter) {
-        
+        print("handle pause a")
+
         guard let jsonString = dataArray.first as? String,
             let jsonData = jsonString.data(using: .utf8),
             let status = try? jsonDecoder.decode(ACMConcertOnPause.self, from: jsonData) else { return }
-        
+
+        print("handle pause b")
+
         let isPlaying = status.isPlaying,
         audioStatus = status.audioStatus
         let displayIsPlaying = isPlaying && (audioStatus == "State.Playing" || audioStatus == "State.Opening")
@@ -160,11 +170,14 @@ final class ACMConcertPlayerViewController: UIViewController {
     }
     
     func handlePlay(dataArray: [Any], ack: SocketAckEmitter) {
-        
+        print("handle play a")
+
         guard let jsonString = dataArray.first as? String,
             let jsonData = jsonString.data(using: .utf8),
             let status = try? jsonDecoder.decode(ACMConcertOnPlay.self, from: jsonData) else { return }
-        
+
+        print("handle play b")
+
         let isPlaying = status.isPlaying,
         audioStatus = status.audioStatus
         let displayIsPlaying = isPlaying && (audioStatus == "State.Playing" || audioStatus == "State.Opening")

@@ -53,14 +53,12 @@ struct ACMConcertOnPause: Decodable {
     let isPlaying: Bool
     let currentTime: Int
     let duration: Int
-    let currentTrack: String
     
     enum CodingKeys: String, CodingKey {
         case audioStatus = "audio_status"
         case isPlaying = "is_playing"
         case currentTime = "current_time"
         case duration
-        case currentTrack = "current_track"
     }
 }
 
