@@ -30,6 +30,7 @@ final class ACMConcertPlayerViewController: UIViewController {
     @IBOutlet weak var skipButton: UIButton!
     @IBOutlet weak var viewQueueButton: UIButton!
 
+    weak var delegate: ACMConcertSocketDelegate?
     let socketManager = SocketManager(socketURL: URL(string: "http://concert.acm.illinois.edu")!)
     let jsonDecoder = JSONDecoder()
     var timer: Timer?
@@ -42,7 +43,7 @@ final class ACMConcertPlayerViewController: UIViewController {
 
         waveView.realWaveColor = UIColor.white.withAlphaComponent(1)
         waveView.maskWaveColor = UIColor.white.withAlphaComponent(0.3)
-        waveView.waveSpeed = 1.3
+        waveView.waveSpeed = 0.75
         waveView.waveHeight = 12
         waveView.waveCurvature = 1.2
         waveView.start()
@@ -82,14 +83,6 @@ final class ACMConcertPlayerViewController: UIViewController {
             self,
             selector: #selector(teardownSocket),
             name: .UIApplicationWillResignActive, object: nil
-        )
-        
-        timer = Timer.scheduledTimer(
-            timeInterval: 1,
-            target: self,
-            selector: #selector(updateProgress),
-            userInfo: nil,
-            repeats: true
         )
     }
 
@@ -140,6 +133,15 @@ final class ACMConcertPlayerViewController: UIViewController {
         
         duration = status.duration
         progress = status.currentTime
+        if timer?.isValid == true {
+            timer = Timer.scheduledTimer(
+                timeInterval: 1,
+                target: self,
+                selector: #selector(updateProgress),
+                userInfo: nil,
+                repeats: true
+            )
+        }
 
         DispatchQueue.main.async { [weak self] in
             self?.updateVolume(with: status.volume)
@@ -227,8 +229,10 @@ final class ACMConcertPlayerViewController: UIViewController {
         }
         print(progress, duration)
         let (remaining_hr, remaining_min, remaining_sec) = secondsToHoursMinutesSeconds(seconds: (duration - progress)/1000)
-        DispatchQueue.main.async {
-            self.progressBar.setProgress(Float(self.progress / self.duration), animated: false)
+        let fraction = Float(progress) / Float(duration)
+        print(fraction)
+        DispatchQueue.main.async { [weak self] in
+            self?.progressBar.setProgress(fraction, animated: false)
         }
         let (elapsed_hr, elapsed_min, elapsed_sec) = secondsToHoursMinutesSeconds(seconds: progress/1000)
         elapsedTimeLabel.text = (elapsed_hr != "00" ? "\(elapsed_hr):" : "") + "\(elapsed_min):\(elapsed_sec)"
@@ -257,15 +261,15 @@ final class ACMConcertPlayerViewController: UIViewController {
     func updateColors(with colors: [UIColor]?) {
         infoLabel.textColor = colors?[0]
         progressBar.progressTintColor = colors?[2]
-        progressBar.trackTintColor = UIColor.gray
-        volumeSlider.tintColor = colors?[4]
+        progressBar.trackTintColor = UIColor.lightGray
+        volumeSlider.tintColor = colors?[2]
         
         playPauseButton.tintColor = colors?[2]
         skipButton.tintColor = colors?[2]
         viewQueueButton.tintColor = colors?[2]
     }
     
-    func secondsToHoursMinutesSeconds (seconds : Int) -> (String, String, String) {
+    func secondsToHoursMinutesSeconds(seconds : Int) -> (String, String, String) {
         if seconds <= 0 {
             return ("00", "00", "00")
         }
@@ -275,6 +279,7 @@ final class ACMConcertPlayerViewController: UIViewController {
     }
     
     public func zfill(_ input: String, _ length: Int) -> String {
+        // use String.init(format: String, vargs...)
         return String(repeating: "0", count: (length - input.count)) + input
     }
 }
