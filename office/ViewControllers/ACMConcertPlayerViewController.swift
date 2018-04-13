@@ -23,6 +23,8 @@ final class ACMConcertPlayerViewController: UIViewController {
 
     @IBOutlet weak var infoLabel: MarqueeLabel!
     @IBOutlet weak var progressBar: UIProgressView!
+    @IBOutlet weak var elapsedTimeLabel: UILabel!
+    @IBOutlet weak var totalTimeLabel: UILabel!
     @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var playPauseButton: UIButton!
     @IBOutlet weak var skipButton: UIButton!
@@ -30,6 +32,9 @@ final class ACMConcertPlayerViewController: UIViewController {
 
     let socketManager = SocketManager(socketURL: URL(string: "http://concert.acm.illinois.edu")!)
     let jsonDecoder = JSONDecoder()
+    var timer: Timer?
+    var duration = 1
+    var progress = 1
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,6 +83,14 @@ final class ACMConcertPlayerViewController: UIViewController {
             selector: #selector(teardownSocket),
             name: .UIApplicationWillResignActive, object: nil
         )
+        
+        timer = Timer.scheduledTimer(
+            timeInterval: 1,
+            target: self,
+            selector: #selector(updateProgress),
+            userInfo: nil,
+            repeats: true
+        )
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -124,13 +137,15 @@ final class ACMConcertPlayerViewController: UIViewController {
             let status = try? jsonDecoder.decode(ACMConcertOnConnect.self, from: jsonData) else { return }
 
         print("handle connection b")
+        
+        duration = status.duration
+        progress = status.currentTime
 
         DispatchQueue.main.async { [weak self] in
             self?.updateVolume(with: status.volume)
             self?.updateArtwork(with: status.thumbnail)
             self?.updatePlayPause(with: status.isPlaying)
             self?.updateInfoLabel(with: status.currentTrack)
-            self?.updateProgress(with: status.currentTime, until: status.duration)
         }
     }
     
@@ -206,8 +221,19 @@ final class ACMConcertPlayerViewController: UIViewController {
         }
     }
     
-    func updateProgress(with progress: Int, until duration: Int) {
-//        progressBar.progress = Float(progress / duration)
+    @objc func updateProgress() {
+        if progress >= duration {
+            timer?.invalidate()
+        }
+        print(progress, duration)
+        let (remaining_hr, remaining_min, remaining_sec) = secondsToHoursMinutesSeconds(seconds: (duration - progress)/1000)
+        DispatchQueue.main.async {
+            self.progressBar.setProgress(Float(self.progress / self.duration), animated: false)
+        }
+        let (elapsed_hr, elapsed_min, elapsed_sec) = secondsToHoursMinutesSeconds(seconds: progress/1000)
+        elapsedTimeLabel.text = (elapsed_hr != "00" ? "\(elapsed_hr):" : "") + "\(elapsed_min):\(elapsed_sec)"
+        totalTimeLabel.text = "-" + (remaining_hr != "00" ? "\(remaining_hr):" : "") + "\(remaining_min):\(remaining_sec)"
+        progress += 1000
     }
     
     func updateInfoLabel(with title: String) {
@@ -230,11 +256,25 @@ final class ACMConcertPlayerViewController: UIViewController {
 
     func updateColors(with colors: [UIColor]?) {
         infoLabel.textColor = colors?[0]
-        progressBar.tintColor = colors?[4]
+        progressBar.progressTintColor = colors?[2]
+        progressBar.trackTintColor = UIColor.gray
         volumeSlider.tintColor = colors?[4]
         
         playPauseButton.tintColor = colors?[2]
         skipButton.tintColor = colors?[2]
         viewQueueButton.tintColor = colors?[2]
+    }
+    
+    func secondsToHoursMinutesSeconds (seconds : Int) -> (String, String, String) {
+        if seconds <= 0 {
+            return ("00", "00", "00")
+        }
+        return (zfill(String(seconds / 3600), 2),
+                zfill(String((seconds % 3600) / 60), 2),
+                zfill(String((seconds % 3600) % 60), 2))
+    }
+    
+    public func zfill(_ input: String, _ length: Int) -> String {
+        return String(repeating: "0", count: (length - input.count)) + input
     }
 }

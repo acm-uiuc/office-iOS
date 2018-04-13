@@ -148,11 +148,11 @@
                                                 <rect key="frame" x="0.0" y="40" width="295" height="24"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:32" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3dy-ye-maY">
-                                                        <rect key="frame" x="0.0" y="2" width="54" height="20.333333333333332"/>
+                                                        <rect key="frame" x="0.0" y="2.3333333333333712" width="54" height="19.333333333333332"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="54" id="zia-m9-Afn"/>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
@@ -160,11 +160,11 @@
                                                         <rect key="frame" x="54" y="11" width="187" height="2"/>
                                                     </progressView>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-2:54" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="osM-Tz-2WN">
-                                                        <rect key="frame" x="241" y="2" width="54" height="20.333333333333332"/>
+                                                        <rect key="frame" x="241" y="2.3333333333333712" width="54" height="19.333333333333332"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="54" id="reM-ej-RVG"/>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
@@ -292,10 +292,12 @@
                         <outlet property="artworkImageContainerView" destination="94I-wY-FFv" id="K3p-hr-RMP"/>
                         <outlet property="artworkImageView" destination="Cjn-G3-Ghg" id="Tv4-td-34O"/>
                         <outlet property="backgroundArtworkImageView" destination="dGK-gc-kYX" id="pPO-yV-Qht"/>
+                        <outlet property="elapsedTimeLabel" destination="3dy-ye-maY" id="ksE-8a-4ew"/>
                         <outlet property="infoLabel" destination="XLZ-DE-T2Q" id="izP-b3-s0V"/>
                         <outlet property="playPauseButton" destination="dg6-l7-MjS" id="wI8-uO-hgX"/>
                         <outlet property="progressBar" destination="CyG-gS-HCC" id="PHT-lX-E7P"/>
                         <outlet property="skipButton" destination="hsV-rb-Q2J" id="1Br-aO-oiJ"/>
+                        <outlet property="totalTimeLabel" destination="osM-Tz-2WN" id="r4Q-d4-cy3"/>
                         <outlet property="viewQueueButton" destination="DTi-Zb-ChI" id="2QR-h0-5ff"/>
                         <outlet property="volumeSlider" destination="qHO-YR-T6D" id="VtY-5t-AfX"/>
                         <outlet property="waveView" destination="5VE-YY-jOb" id="i65-sJ-pUj"/>
