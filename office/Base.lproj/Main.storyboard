@@ -137,9 +137,6 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="aAS-GI-Hzc"/>
                                         </constraints>
-                                        <connections>
-                                            <action selector="volumeSlider" destination="YY9-tT-xM0" eventType="valueChanged" id="0ml-qr-BRA"/>
-                                        </connections>
                                     </slider>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Orc-hP-ajA">
                                         <rect key="frame" x="77.333333333333314" y="92" width="220" height="60"/>
@@ -160,9 +157,6 @@
                                                     <constraint firstAttribute="width" constant="60" id="b6S-kd-xd5"/>
                                                 </constraints>
                                                 <state key="normal" image="play"/>
-                                                <connections>
-                                                    <action selector="button" destination="YY9-tT-xM0" eventType="touchUpInside" id="RCW-4J-06R"/>
-                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hsV-rb-Q2J">
                                                 <rect key="frame" x="160" y="0.0" width="60" height="60"/>

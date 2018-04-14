@@ -37,6 +37,7 @@ public final class ACMConcertSocket {
         socketManager.defaultSocket.on("volume_changed", callback: handleVolume)
         socketManager.defaultSocket.on("paused",         callback: handlePause)
         socketManager.defaultSocket.on("played",         callback: handlePlay)
+        socketManager.defaultSocket.on("stopped",        callback: handlePause)
     }
     
     @objc public func setupSocket() {
@@ -46,10 +47,6 @@ public final class ACMConcertSocket {
     @objc public func teardownSocket() {
         socketManager.disconnect()
     }
-    
-//    private func handle() {
-//        delegate?.acmConcertSocket(self, didReceivePlayStateChange: true)
-//    }
     
     // MARK: Handlers
     func handleConnection(dataArray: [Any], ack: SocketAckEmitter) {
@@ -70,7 +67,7 @@ public final class ACMConcertSocket {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
 
-            strongSelf.delegate?.acmConcertSocket(strongSelf, didReceiveProgressUpdate: status.currentTime, didReceiveDurationUpdate: status.duration)
+            strongSelf.delegate?.acmConcertSocket(strongSelf, didReceiveProgressUpdate: status.currentTime/1000, didReceiveDurationUpdate: status.duration/1000)
             strongSelf.delegate?.acmConcertSocket(strongSelf, didReceiveNewArtwork: url)
             strongSelf.delegate?.acmConcertSocket(strongSelf, didReceivePlayStateUpdate: displayIsPlaying)
             strongSelf.delegate?.acmConcertSocket(strongSelf, didReceiveVolumeUpdate: status.volume)
@@ -128,12 +125,14 @@ public final class ACMConcertSocket {
         let isPlaying = status.isPlaying,
         audioStatus = status.audioStatus
         let displayIsPlaying = isPlaying && (audioStatus == "State.Playing" || audioStatus == "State.Opening")
-        print(displayIsPlaying)
+        let url = URL.init(string: "http://concert.acm.illinois.edu/" + status.thumbnail)
         
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
             strongSelf.delegate?.acmConcertSocket(strongSelf, didReceivePlayStateUpdate: displayIsPlaying)
+            strongSelf.delegate?.acmConcertSocket(strongSelf, didReceiveProgressUpdate: status.currentTime/1000, didReceiveDurationUpdate: status.duration/1000)
+            strongSelf.delegate?.acmConcertSocket(strongSelf, didReceiveInfoLabel: status.currentTrack)
+            strongSelf.delegate?.acmConcertSocket(strongSelf, didReceiveNewArtwork: url)
         }
     }
-    
 }

@@ -96,10 +96,10 @@ final class ACMConcertPlayerViewController: UIViewController {
 //        socketManager.defaultSocket.emit("pause")
 //    }
 //
-//    @IBAction func didChangeVolume() {
-//        let volume = Int(volumeSlider.value)
-//        socketManager.defaultSocket.emit("volume", volume)
-//    }
+    @IBAction func didChangeVolume() {
+        let volume = Int(volumeSlider.value)
+        socketManager.defaultSocket.emit("volume", volume)
+    }
     
     func updateArtwork(with url: URL?) {
         DispatchQueue.global(qos: .userInitiated).async {
@@ -124,16 +124,14 @@ final class ACMConcertPlayerViewController: UIViewController {
             timer?.invalidate()
         }
         print(progress, duration)
-        let (remaining_hr, remaining_min, remaining_sec) = secondsToHoursMinutesSeconds(seconds: (duration - progress)/1000)
         let fraction = Float(progress) / Float(duration)
-        print(fraction)
+//        print(fraction)
         DispatchQueue.main.async { [weak self] in
             self?.progressBar.setProgress(fraction, animated: false)
         }
-        let (elapsed_hr, elapsed_min, elapsed_sec) = secondsToHoursMinutesSeconds(seconds: progress/1000)
-        elapsedTimeLabel.text = (elapsed_hr != "00" ? "\(elapsed_hr):" : "") + "\(elapsed_min):\(elapsed_sec)"
-        totalTimeLabel.text = "-" + (remaining_hr != "00" ? "\(remaining_hr):" : "") + "\(remaining_min):\(remaining_sec)"
-        progress += 1000
+        elapsedTimeLabel.text = secondsToHoursMinutesSeconds(seconds: progress, elapsed: true)
+        totalTimeLabel.text = secondsToHoursMinutesSeconds(seconds: (duration - progress), elapsed: false)
+        progress += 1
     }
 
     func updateColors(with colors: [UIColor]?) {
@@ -147,25 +145,43 @@ final class ACMConcertPlayerViewController: UIViewController {
         viewQueueButton.tintColor = colors?[2]
     }
     
-    func secondsToHoursMinutesSeconds(seconds : Int) -> (String, String, String) {
-        if seconds <= 0 {
-            return ("00", "00", "00")
+    func secondsToHoursMinutesSeconds(seconds: Int, elapsed: Bool) -> String {
+//        if seconds <= 0 && elapsed {
+//            return ("00:00:00")
+//        } else if seconds <= 0 && !elapsed {
+//            return ("-00:00:00")
+//        }
+        // (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
+        let hr = seconds / 3600
+        let min = (seconds % 3600) / 60
+        let sec = (seconds % 3600) % 60
+//        print(hr, min, sec)
+        var result = ""
+        if elapsed {
+            if hr > 0 {
+                result = String.init(format: "%d:%02d:02d", hr, min, sec)
+            } else {
+                result = String.init(format: "%d:%02d", min, sec)
+            }
+        } else {
+            if hr > 0 {
+                result = String.init(format: "-%d:%02d:02d", hr, min, sec)
+            } else {
+                result = String.init(format: "-%d:%02d", min, sec)
+            }
         }
-        return (zfill(String(seconds / 3600), 2),
-                zfill(String((seconds % 3600) / 60), 2),
-                zfill(String((seconds % 3600) % 60), 2))
+        return result
     }
-    
-    public func zfill(_ input: String, _ length: Int) -> String {
-        // use String.init(format: String, vargs...)
-        return String.init(format: "%0d.0s", arguments: [length, input])
-    }
+
 }
 
 extension ACMConcertPlayerViewController: ACMConcertSocketDelegate {
     func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceivePlayStateUpdate isPlaying: Bool) {
         let image = isPlaying ? #imageLiteral(resourceName: "pause") : #imageLiteral(resourceName: "play")
         self.playPauseButton.setImage(image, for: .normal)
+        if !isPlaying {
+            timer?.invalidate()
+        }
     }
     
     func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceiveVolumeUpdate newVolume: Int) {
@@ -173,7 +189,9 @@ extension ACMConcertPlayerViewController: ACMConcertSocketDelegate {
     }
     
     func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceiveProgressUpdate progress: Int, didReceiveDurationUpdate duration: Int) {
-        if timer?.isValid == false {
+        self.duration = duration
+        self.progress = progress
+        if timer?.isValid != true {
             timer = Timer.scheduledTimer(
                 timeInterval: 1,
                 target: self,
@@ -192,4 +210,3 @@ extension ACMConcertPlayerViewController: ACMConcertSocketDelegate {
         updateArtwork(with: url)
     }
 }
-
