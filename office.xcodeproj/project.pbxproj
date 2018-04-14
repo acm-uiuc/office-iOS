@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3556965B207DD585004F1553 /* GrootSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3556965A207DD585004F1553 /* GrootSecrets.swift */; };
 		3556965D207EACA9004F1553 /* ConcertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3556965C207EACA9004F1553 /* ConcertService.swift */; };
+		3556965F208043FA004F1553 /* ACMConcertSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3556965E208043FA004F1553 /* ACMConcertSocket.swift */; };
 		951D8A492030D8D9003AD47E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951D8A482030D8D9003AD47E /* AppDelegate.swift */; };
 		951D8A4E2030D8D9003AD47E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 951D8A4C2030D8D9003AD47E /* Main.storyboard */; };
 		951D8A502030D8D9003AD47E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 951D8A4F2030D8D9003AD47E /* Assets.xcassets */; };
@@ -28,6 +29,7 @@
 /* Begin PBXFileReference section */
 		3556965A207DD585004F1553 /* GrootSecrets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GrootSecrets.swift; sourceTree = "<group>"; };
 		3556965C207EACA9004F1553 /* ConcertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcertService.swift; sourceTree = "<group>"; };
+		3556965E208043FA004F1553 /* ACMConcertSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACMConcertSocket.swift; sourceTree = "<group>"; };
 		42F27291C350E7ED2D51E2A6 /* Pods-office.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-office.release.xcconfig"; path = "Pods/Target Support Files/Pods-office/Pods-office.release.xcconfig"; sourceTree = "<group>"; };
 		8A7B952881A9F5DDFF6AAFFF /* Pods_office.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_office.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		951D8A452030D8D9003AD47E /* office.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = office.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -130,6 +132,7 @@
 				951D8A602030DD6C003AD47E /* ACMLoginViewController.swift */,
 				951D8A622030DDEA003AD47E /* ACMBaseViewController.swift */,
 				95FD06DE2030EE8800123388 /* ACMConcertPlayerViewController.swift */,
+				3556965E208043FA004F1553 /* ACMConcertSocket.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -283,6 +286,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3556965F208043FA004F1553 /* ACMConcertSocket.swift in Sources */,
 				95FD06E320310E1100123388 /* ACMConcertVolume.swift in Sources */,
 				959BB655207EADB9000EA75C /* UIImageExtensions.swift in Sources */,
 				95FD06DF2030EE8800123388 /* ACMConcertPlayerViewController.swift in Sources */,
