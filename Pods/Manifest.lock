@@ -11,21 +11,30 @@ PODS:
   - YXWaveView (0.5.0)
 
 DEPENDENCIES:
-  - APIManager (from `https://github.com/rauhul/api-manager.git`, commit `75e517645ed0bde8cec80ddcb6223e85b9810e61`)
+  - APIManager (from `https://github.com/rauhul/api-manager.git`, commit `1a4210650dfcc4d15b559cd7dc63e892b7f5eb3e`)
   - GPUImage
   - MarqueeLabel
   - Socket.IO-Client-Swift (~> 13.1.0)
   - UIImageColors (~> 2.0)
   - YXWaveView
 
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - GPUImage
+    - MarqueeLabel
+    - Socket.IO-Client-Swift
+    - Starscream
+    - UIImageColors
+    - YXWaveView
+
 EXTERNAL SOURCES:
   APIManager:
-    :commit: 75e517645ed0bde8cec80ddcb6223e85b9810e61
+    :commit: 1a4210650dfcc4d15b559cd7dc63e892b7f5eb3e
     :git: https://github.com/rauhul/api-manager.git
 
 CHECKOUT OPTIONS:
   APIManager:
-    :commit: 75e517645ed0bde8cec80ddcb6223e85b9810e61
+    :commit: 1a4210650dfcc4d15b559cd7dc63e892b7f5eb3e
     :git: https://github.com/rauhul/api-manager.git
 
 SPEC CHECKSUMS:
@@ -37,6 +46,6 @@ SPEC CHECKSUMS:
   UIImageColors: 3ae0150e539342697808281a3975fe5dec2024ce
   YXWaveView: 3570d7244b08effd077a5c63b0693aa44b7cd369
 
-PODFILE CHECKSUM: ef15a457760ebf8b7e7b6407d88e397cb3260935
+PODFILE CHECKSUM: d0f2b764e202a302afcdcb01d779617d675cbe5d
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.0

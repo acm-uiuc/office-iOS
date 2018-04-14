@@ -82,10 +82,10 @@ class ACMLoginViewController: ACMBaseViewController {
         loginButton.isEnabled = false
         loginButton.alpha     = 0.5
 
-        GrootSessionService.createSessionFor(user: netID, withPassword: password)
+        ConcertService.createSessionFor(user: netID, withPassword: password)
         .onCompletion { result in
             switch result {
-            case .success(let session):
+            case .success(let session, let cookies):
                 ACMApplicationController.shared.session = session
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: "showConcertPlayer", sender: nil)
@@ -103,6 +103,6 @@ class ACMLoginViewController: ACMBaseViewController {
                 self.loginButton.alpha     = 1.0
             }
         }
-        .perform()
+        .launch()
     }
 }

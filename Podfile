@@ -7,5 +7,5 @@ target 'office' do
     pod 'Socket.IO-Client-Swift', '~> 13.1.0'
     pod 'GPUImage'
     pod 'YXWaveView'
-    pod 'APIManager', :git => 'https://github.com/rauhul/api-manager.git', :commit => '75e517645ed0bde8cec80ddcb6223e85b9810e61'
+    pod 'APIManager', :git => 'https://github.com/rauhul/api-manager.git', :commit => '1a4210650dfcc4d15b559cd7dc63e892b7f5eb3e'
 end
