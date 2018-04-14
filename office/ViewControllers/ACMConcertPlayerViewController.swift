@@ -132,8 +132,12 @@ final class ACMConcertPlayerViewController: UIViewController {
             self?.progressBar.setProgress(fraction, animated: false)
         }
 
-        elapsedTimeLabel.text = secondsToHoursMinutesSeconds(seconds: progress, elapsed: true)
-        totalTimeLabel.text = secondsToHoursMinutesSeconds(seconds: (duration - progress), elapsed: false)
+        let elapsed = secondsToHoursMinutesSeconds(seconds: progress, elapsed: true)
+        let remain = secondsToHoursMinutesSeconds(seconds: (duration - progress), elapsed: false)
+        elapsedTimeLabel.font = UIFont.monospacedDigitSystemFont(ofSize: 12.0, weight: UIFont.Weight.regular)
+        remainingTimeLabel.font = UIFont.monospacedDigitSystemFont(ofSize: 12.0, weight: UIFont.Weight.regular)
+        elapsedTimeLabel.text = elapsed
+        remainingTimeLabel.text = remain
         progress += 1
     }
 
@@ -141,7 +145,9 @@ final class ACMConcertPlayerViewController: UIViewController {
         infoLabel.textColor = colors?.primary
         progressBar.progressTintColor = colors?.secondary
         progressBar.trackTintColor = colors?.detail
-        volumeSlider.tintColor = colors?.secondary
+        volumeSlider.maximumTrackTintColor = colors?.detail
+        volumeSlider.minimumTrackTintColor = colors?.secondary
+        
         
         playPauseButton.tintColor = colors?.secondary
         skipButton.tintColor = colors?.secondary
@@ -159,31 +165,23 @@ final class ACMConcertPlayerViewController: UIViewController {
     }
     
     func secondsToHoursMinutesSeconds(seconds: Int, elapsed: Bool) -> String {
-//        if seconds <= 0 && elapsed {
-//            return ("00:00:00")
-//        } else if seconds <= 0 && !elapsed {
-//            return ("-00:00:00")
-//        }
-        // (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
         let hr = seconds / 3600
         let min = (seconds % 3600) / 60
         let sec = (seconds % 3600) % 60
-//        print(hr, min, sec)
-        var result = ""
+        
         if elapsed {
             if hr > 0 {
-                result = String.init(format: "%d:%02d:02d", hr, min, sec)
+                return String.init(format: "%d:%02d:%02d", hr, min, sec)
             } else {
-                result = String.init(format: "%d:%02d", min, sec)
+                return String.init(format: "%d:%02d", min, sec)
             }
         } else {
             if hr > 0 {
-                result = String.init(format: "-%d:%02d:02d", hr, min, sec)
+                return String.init(format: "-%d:%02d:%02d", hr, min, sec)
             } else {
-                result = String.init(format: "-%d:%02d", min, sec)
+                return String.init(format: "-%d:%02d", min, sec)
             }
         }
-        return result
     }
 
 }
@@ -196,7 +194,7 @@ extension ACMConcertPlayerViewController: ACMConcertSocketDelegate {
             timer?.invalidate()
         }
     }
-    
+
     func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceiveVolumeUpdate newVolume: Int) {
         self.volumeSlider.value = Float(newVolume)
     }
