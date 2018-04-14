@@ -3,7 +3,7 @@ use_frameworks!
 
 target 'office' do
     pod 'MarqueeLabel'
-    pod 'ChameleonFramework'
+    pod 'UIImageColors', '~> 2.0'
     pod 'Socket.IO-Client-Swift', '~> 13.1.0'
     pod 'GPUImage'
     pod 'YXWaveView'

@@ -9,7 +9,7 @@
 import UIKit
 import SocketIO
 import MarqueeLabel
-import ChameleonFramework
+import UIImageColors
 import YXWaveView
 
 final class ACMConcertPlayerViewController: UIViewController {
@@ -19,18 +19,18 @@ final class ACMConcertPlayerViewController: UIViewController {
 
 
     @IBOutlet weak var waveView: YXWaveView!
+    @IBOutlet weak var textContainerView: UIView!
 
 
     @IBOutlet weak var infoLabel: MarqueeLabel!
     @IBOutlet weak var progressBar: UIProgressView!
     @IBOutlet weak var elapsedTimeLabel: UILabel!
-    @IBOutlet weak var totalTimeLabel: UILabel!
+    @IBOutlet weak var remainingTimeLabel: UILabel!
     @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var playPauseButton: UIButton!
     @IBOutlet weak var skipButton: UIButton!
     @IBOutlet weak var viewQueueButton: UIButton!
 
-    weak var delegate: ACMConcertSocketDelegate?
     let socketManager = SocketManager(socketURL: URL(string: "http://concert.acm.illinois.edu")!)
     let jsonDecoder = JSONDecoder()
     var timer: Timer?
@@ -213,7 +213,7 @@ final class ACMConcertPlayerViewController: UIViewController {
 
                 let image = UIImage(data: data)
                 let blurredImage = image?.blur(radius: 0.6)
-                let colors = NSArray(ofColorsFrom: image, withFlatScheme: false) as! [UIColor]
+                let colors = image?.getColors()
 
                 DispatchQueue.main.async { [weak self] in
                     self?.update(artworkImage: image, withBlurredArtworkImage: blurredImage)
@@ -236,7 +236,7 @@ final class ACMConcertPlayerViewController: UIViewController {
         }
         let (elapsed_hr, elapsed_min, elapsed_sec) = secondsToHoursMinutesSeconds(seconds: progress/1000)
         elapsedTimeLabel.text = (elapsed_hr != "00" ? "\(elapsed_hr):" : "") + "\(elapsed_min):\(elapsed_sec)"
-        totalTimeLabel.text = "-" + (remaining_hr != "00" ? "\(remaining_hr):" : "") + "\(remaining_min):\(remaining_sec)"
+        remainingTimeLabel.text = "-" + (remaining_hr != "00" ? "\(remaining_hr):" : "") + "\(remaining_min):\(remaining_sec)"
         progress += 1000
     }
     
@@ -258,15 +258,25 @@ final class ACMConcertPlayerViewController: UIViewController {
         backgroundArtworkImageView.image = blurredArtworkImage
     }
 
-    func updateColors(with colors: [UIColor]?) {
-        infoLabel.textColor = colors?[0]
-        progressBar.progressTintColor = colors?[2]
-        progressBar.trackTintColor = UIColor.lightGray
-        volumeSlider.tintColor = colors?[2]
+    func updateColors(with colors: UIImageColors?) {
+        infoLabel.textColor = colors?.primary
+        progressBar.progressTintColor = colors?.secondary
+        progressBar.trackTintColor = colors?.detail
+        volumeSlider.tintColor = colors?.secondary
         
-        playPauseButton.tintColor = colors?[2]
-        skipButton.tintColor = colors?[2]
-        viewQueueButton.tintColor = colors?[2]
+        playPauseButton.tintColor = colors?.secondary
+        skipButton.tintColor = colors?.secondary
+        viewQueueButton.tintColor = colors?.secondary
+
+        elapsedTimeLabel.textColor = colors?.secondary
+        remainingTimeLabel.textColor = colors?.secondary
+
+        let waveAlpha: CGFloat = 0.3
+        let textViewAlpha = 1 - pow((1 - waveAlpha), 2)
+
+        textContainerView.backgroundColor = colors?.background.withAlphaComponent(textViewAlpha) ?? UIColor.white.withAlphaComponent(textViewAlpha)
+        waveView.realWaveColor = colors?.background.withAlphaComponent(waveAlpha) ?? UIColor.white.withAlphaComponent(waveAlpha)
+        waveView.maskWaveColor = colors?.background?.withAlphaComponent(waveAlpha) ?? UIColor.white.withAlphaComponent(waveAlpha)
     }
     
     func secondsToHoursMinutesSeconds(seconds : Int) -> (String, String, String) {
