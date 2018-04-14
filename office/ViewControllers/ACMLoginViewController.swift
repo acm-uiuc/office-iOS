@@ -82,7 +82,7 @@ class ACMLoginViewController: ACMBaseViewController {
         loginButton.isEnabled = false
         loginButton.alpha     = 0.5
 
-        ConcertSessionService.createSessionFor(user: netID, withPassword: password)
+        GrootSessionService.createSessionFor(user: netID, withPassword: password)
         .onCompletion { result in
             switch result {
             case .success(let session):
