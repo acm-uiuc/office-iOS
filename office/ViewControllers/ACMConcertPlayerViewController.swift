@@ -9,7 +9,7 @@
 import UIKit
 import SocketIO
 import MarqueeLabel
-import ChameleonFramework
+import UIImageColors
 import YXWaveView
 
 final class ACMConcertPlayerViewController: UIViewController {
@@ -19,19 +19,20 @@ final class ACMConcertPlayerViewController: UIViewController {
 
 
     @IBOutlet weak var waveView: YXWaveView!
+    @IBOutlet weak var textContainerView: UIView!
 
 
     @IBOutlet weak var infoLabel: MarqueeLabel!
     @IBOutlet weak var progressBar: UIProgressView!
     @IBOutlet weak var elapsedTimeLabel: UILabel!
-    @IBOutlet weak var totalTimeLabel: UILabel!
+    @IBOutlet weak var remainingTimeLabel: UILabel!
     @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var playPauseButton: UIButton!
     @IBOutlet weak var skipButton: UIButton!
     @IBOutlet weak var viewQueueButton: UIButton!
 
+
     lazy var acmConcertSocket = ACMConcertSocket(delegate: self)
-    
     var timer: Timer?
     var duration = 1
     var progress = 1
@@ -109,7 +110,7 @@ final class ACMConcertPlayerViewController: UIViewController {
 
                 let image = UIImage(data: data)
                 let blurredImage = image?.blur(radius: 0.6)
-                let colors = NSArray(ofColorsFrom: image, withFlatScheme: false) as! [UIColor]
+                let colors = image?.getColors()
 
                 DispatchQueue.main.async { [weak self] in
                     self?.artworkImageView.image = image
@@ -130,20 +131,31 @@ final class ACMConcertPlayerViewController: UIViewController {
         DispatchQueue.main.async { [weak self] in
             self?.progressBar.setProgress(fraction, animated: false)
         }
+
         elapsedTimeLabel.text = secondsToHoursMinutesSeconds(seconds: progress, elapsed: true)
         totalTimeLabel.text = secondsToHoursMinutesSeconds(seconds: (duration - progress), elapsed: false)
         progress += 1
     }
 
-    func updateColors(with colors: [UIColor]?) {
-        infoLabel.textColor = colors?[0]
-        progressBar.progressTintColor = colors?[2]
-        progressBar.trackTintColor = UIColor.lightGray
-        volumeSlider.tintColor = colors?[2]
+    func updateColors(with colors: UIImageColors?) {
+        infoLabel.textColor = colors?.primary
+        progressBar.progressTintColor = colors?.secondary
+        progressBar.trackTintColor = colors?.detail
+        volumeSlider.tintColor = colors?.secondary
         
-        playPauseButton.tintColor = colors?[2]
-        skipButton.tintColor = colors?[2]
-        viewQueueButton.tintColor = colors?[2]
+        playPauseButton.tintColor = colors?.secondary
+        skipButton.tintColor = colors?.secondary
+        viewQueueButton.tintColor = colors?.secondary
+
+        elapsedTimeLabel.textColor = colors?.secondary
+        remainingTimeLabel.textColor = colors?.secondary
+
+        let waveAlpha: CGFloat = 0.3
+        let textViewAlpha = 1 - pow((1 - waveAlpha), 2)
+
+        textContainerView.backgroundColor = colors?.background.withAlphaComponent(textViewAlpha) ?? UIColor.white.withAlphaComponent(textViewAlpha)
+        waveView.realWaveColor = colors?.background.withAlphaComponent(waveAlpha) ?? UIColor.white.withAlphaComponent(waveAlpha)
+        waveView.maskWaveColor = colors?.background?.withAlphaComponent(waveAlpha) ?? UIColor.white.withAlphaComponent(waveAlpha)
     }
     
     func secondsToHoursMinutesSeconds(seconds: Int, elapsed: Bool) -> String {

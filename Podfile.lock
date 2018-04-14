@@ -1,8 +1,5 @@
 PODS:
   - APIManager (0.2.0)
-  - ChameleonFramework (2.1.0):
-    - ChameleonFramework/Default (= 2.1.0)
-  - ChameleonFramework/Default (2.1.0)
   - GPUImage (0.1.7)
   - MarqueeLabel (3.1.4):
     - MarqueeLabel/ObjC (= 3.1.4)
@@ -10,14 +7,15 @@ PODS:
   - Socket.IO-Client-Swift (13.1.0):
     - Starscream (~> 3.0.2)
   - Starscream (3.0.3)
+  - UIImageColors (2.0.0)
   - YXWaveView (0.5.0)
 
 DEPENDENCIES:
   - APIManager (from `https://github.com/rauhul/api-manager.git`, commit `75e517645ed0bde8cec80ddcb6223e85b9810e61`)
-  - ChameleonFramework
   - GPUImage
   - MarqueeLabel
   - Socket.IO-Client-Swift (~> 13.1.0)
+  - UIImageColors (~> 2.0)
   - YXWaveView
 
 EXTERNAL SOURCES:
@@ -32,13 +30,13 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   APIManager: 505550b6d705c44c58a30ac36f4de8277b5745e5
-  ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
   GPUImage: 733a5f0fab92df9de1c37ba9df520a833ccb406d
   MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
   Socket.IO-Client-Swift: b67a96d6a9e5f271bceb93e99779d2cf77c74868
   Starscream: dfb1b3f39506717ee52b67fb48de0c8269504cbc
+  UIImageColors: 3ae0150e539342697808281a3975fe5dec2024ce
   YXWaveView: 3570d7244b08effd077a5c63b0693aa44b7cd369
 
-PODFILE CHECKSUM: 000934d214a6ac45154011aac3f2b0dfe3dd22ac
+PODFILE CHECKSUM: ef15a457760ebf8b7e7b6407d88e397cb3260935
 
 COCOAPODS: 1.4.0
