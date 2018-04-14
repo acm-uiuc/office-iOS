@@ -20,3 +20,7 @@ class ACMApplicationController {
 struct ACMSession: APIReturnable, Decodable {
     let token: String
 }
+
+struct ConcertSession: APIReturnable, Decodable {
+    let session: String
+}

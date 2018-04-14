@@ -32,7 +32,7 @@ class ACMLoginViewController: ACMBaseViewController {
     }
 
     // MARK: - Next Responder
-    override func nextReponder(current: UIResponder) -> UIResponder? {
+    override func nextResponder(current: UIResponder) -> UIResponder? {
         switch current {
         case netIDField:
             return passwordField

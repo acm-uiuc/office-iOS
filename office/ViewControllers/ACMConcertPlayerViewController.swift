@@ -9,7 +9,7 @@
 import UIKit
 import SocketIO
 import MarqueeLabel
-import ChameleonFramework
+import UIImageColors
 import YXWaveView
 
 final class ACMConcertPlayerViewController: UIViewController {
@@ -19,25 +19,30 @@ final class ACMConcertPlayerViewController: UIViewController {
 
 
     @IBOutlet weak var waveView: YXWaveView!
+    @IBOutlet weak var textContainerView: UIView!
 
 
     @IBOutlet weak var infoLabel: MarqueeLabel!
     @IBOutlet weak var progressBar: UIProgressView!
+    @IBOutlet weak var elapsedTimeLabel: UILabel!
+    @IBOutlet weak var remainingTimeLabel: UILabel!
     @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var playPauseButton: UIButton!
     @IBOutlet weak var skipButton: UIButton!
     @IBOutlet weak var viewQueueButton: UIButton!
 
-    let socketManger = SocketManager(socketURL: URL(string: "http://concert.acm.illinois.edu")!)
-    let jsonDecoder = JSONDecoder()
+
+    lazy var acmConcertSocket = ACMConcertSocket(delegate: self)
+    var timer: Timer?
+    var duration = 1
+    var progress = 1
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureSocket()
 
         waveView.realWaveColor = UIColor.white.withAlphaComponent(1)
         waveView.maskWaveColor = UIColor.white.withAlphaComponent(0.3)
-        waveView.waveSpeed = 1.3
+        waveView.waveSpeed = 0.75
         waveView.waveHeight = 12
         waveView.waveCurvature = 1.2
         waveView.start()
@@ -67,174 +72,154 @@ final class ACMConcertPlayerViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupSocket()
+        acmConcertSocket.setupSocket()
         NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(setupSocket),
+            acmConcertSocket,
+            selector: #selector(ACMConcertSocket.setupSocket),
             name: .UIApplicationDidBecomeActive, object: nil
         )
         NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(teardownSocket),
+            acmConcertSocket,
+            selector: #selector(ACMConcertSocket.teardownSocket),
             name: .UIApplicationWillResignActive, object: nil
         )
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        NotificationCenter.default.removeObserver(self, name: .UIApplicationDidBecomeActive, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .UIApplicationWillResignActive, object: nil)
-        teardownSocket()
-    }
-
-    // MARK: Socket Init
-    func configureSocket() {
-        socketManger.defaultSocket.on("connected",      callback: handleConnection)
-        socketManger.defaultSocket.on("heartbeat",      callback: handleConnection)
-        socketManger.defaultSocket.on("skipped",        callback: handleConnection)
-        socketManger.defaultSocket.on("volume_changed", callback: handleVolume)
-        socketManger.defaultSocket.on("paused",         callback: handlePause)
-        socketManger.defaultSocket.on("played",         callback: handlePlay)
-    }
-
-    @objc func setupSocket() {
-        socketManger.connect()
-    }
-
-    @objc func teardownSocket() {
-        socketManger.disconnect()
+        NotificationCenter.default.removeObserver(acmConcertSocket, name: .UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.removeObserver(acmConcertSocket, name: .UIApplicationWillResignActive, object: nil)
+        acmConcertSocket.teardownSocket()
     }
 
     // MARK: Actions
-    @IBAction func button() {
-        socketManger.defaultSocket.emit("pause")
-    }
-
+//    @IBAction func button() {
+//        socketManager.defaultSocket.emit("pause")
+//    }
+//
     @IBAction func didChangeVolume() {
         let volume = Int(volumeSlider.value)
-        socketManger.defaultSocket.emit("volume", volume)
-    }
-
-    // MARK: Handlers
-    func handleConnection(dataArray: [Any], ack: SocketAckEmitter) {
-        print("handle connection a")
-
-        guard let jsonString = dataArray.first as? String,
-            let jsonData = jsonString.data(using: .utf8),
-            let status = try? jsonDecoder.decode(ACMConcertOnConnect.self, from: jsonData) else { return }
-
-        print("handle connection b")
-
-        DispatchQueue.main.async { [weak self] in
-            self?.updateVolume(with: status.volume)
-            self?.updateArtwork(with: status.thumbnail)
-            self?.updatePlayPause(with: status.isPlaying)
-            self?.updateInfoLabel(with: status.currentTrack)
-            self?.updateProgress(with: status.currentTime, until: status.duration)
-        }
+        print(volume)
+        acmConcertSocket.sendVolumeChanged(with: volume)
     }
     
-    func handleVolume(dataArray: [Any], ack: SocketAckEmitter) {
-        print("handle volume a")
-
-        guard let jsonString = dataArray.first as? String,
-            let jsonData = jsonString.data(using: .utf8),
-            let status = try? jsonDecoder.decode(ACMConcertVolume.self, from: jsonData) else { return }
-
-        print("handle volume b")
-
-        let volume = status.volume
-        
-        DispatchQueue.main.async { [weak self] in
-            self?.updateVolume(with: volume)
-        }
-    }
-    
-    func handlePause(dataArray: [Any], ack: SocketAckEmitter) {
-        print("handle pause a")
-
-        guard let jsonString = dataArray.first as? String,
-            let jsonData = jsonString.data(using: .utf8),
-            let status = try? jsonDecoder.decode(ACMConcertOnPause.self, from: jsonData) else { return }
-
-        print("handle pause b")
-
-        let isPlaying = status.isPlaying,
-        audioStatus = status.audioStatus
-        let displayIsPlaying = isPlaying && (audioStatus == "State.Playing" || audioStatus == "State.Opening")
-        print(displayIsPlaying)
-        
-        DispatchQueue.main.async { [weak self] in
-            self?.updatePlayPause(with: displayIsPlaying)
-        }
-    }
-    
-    func handlePlay(dataArray: [Any], ack: SocketAckEmitter) {
-        print("handle play a")
-
-        guard let jsonString = dataArray.first as? String,
-            let jsonData = jsonString.data(using: .utf8),
-            let status = try? jsonDecoder.decode(ACMConcertOnPlay.self, from: jsonData) else { return }
-
-        print("handle play b")
-
-        let isPlaying = status.isPlaying,
-        audioStatus = status.audioStatus
-        let displayIsPlaying = isPlaying && (audioStatus == "State.Playing" || audioStatus == "State.Opening")
-        print(displayIsPlaying)
-        
-        DispatchQueue.main.async { [weak self] in
-            self?.updatePlayPause(with: displayIsPlaying)
-        }
-    }
-    
-    func updateArtwork(with artworkUrl: String) {
+    func updateArtwork(with url: URL?) {
         DispatchQueue.global(qos: .userInitiated).async {
-            let url = URL(string: "http://concert.acm.illinois.edu/" + artworkUrl)
             URLSession.shared.dataTask(with: url!) { data, response, error in
                 guard let data = data else { return }
 
                 let image = UIImage(data: data)
                 let blurredImage = image?.blur(radius: 0.6)
-                let colors = NSArray(ofColorsFrom: image, withFlatScheme: false) as! [UIColor]
+                let colors = image?.getColors()
 
                 DispatchQueue.main.async { [weak self] in
-                    self?.update(artworkImage: image, withBlurredArtworkImage: blurredImage)
+                    self?.artworkImageView.image = image
+                    self?.backgroundArtworkImageView.image = blurredImage
                     self?.updateColors(with: colors)
                 }
             }.resume()
         }
     }
     
-    func updateProgress(with progress: Int, until duration: Int) {
-//        progressBar.progress = Float(progress / duration)
+    @objc func updateProgress() {
+        if progress >= duration {
+            timer?.invalidate()
+        }
+        print(progress, duration)
+        let fraction = Float(progress) / Float(duration)
+//        print(fraction)
+        DispatchQueue.main.async { [weak self] in
+            self?.progressBar.setProgress(fraction, animated: false)
+        }
+
+        elapsedTimeLabel.text = secondsToHoursMinutesSeconds(seconds: progress, elapsed: true)
+        totalTimeLabel.text = secondsToHoursMinutesSeconds(seconds: (duration - progress), elapsed: false)
+        progress += 1
+    }
+
+    func updateColors(with colors: UIImageColors?) {
+        infoLabel.textColor = colors?.primary
+        progressBar.progressTintColor = colors?.secondary
+        progressBar.trackTintColor = colors?.detail
+        volumeSlider.tintColor = colors?.secondary
+        
+        playPauseButton.tintColor = colors?.secondary
+        skipButton.tintColor = colors?.secondary
+        viewQueueButton.tintColor = colors?.secondary
+
+        elapsedTimeLabel.textColor = colors?.secondary
+        remainingTimeLabel.textColor = colors?.secondary
+
+        let waveAlpha: CGFloat = 0.3
+        let textViewAlpha = 1 - pow((1 - waveAlpha), 2)
+
+        textContainerView.backgroundColor = colors?.background.withAlphaComponent(textViewAlpha) ?? UIColor.white.withAlphaComponent(textViewAlpha)
+        waveView.realWaveColor = colors?.background.withAlphaComponent(waveAlpha) ?? UIColor.white.withAlphaComponent(waveAlpha)
+        waveView.maskWaveColor = colors?.background?.withAlphaComponent(waveAlpha) ?? UIColor.white.withAlphaComponent(waveAlpha)
     }
     
-    func updateInfoLabel(with title: String) {
-        infoLabel.text = title
+    func secondsToHoursMinutesSeconds(seconds: Int, elapsed: Bool) -> String {
+//        if seconds <= 0 && elapsed {
+//            return ("00:00:00")
+//        } else if seconds <= 0 && !elapsed {
+//            return ("-00:00:00")
+//        }
+        // (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
+        let hr = seconds / 3600
+        let min = (seconds % 3600) / 60
+        let sec = (seconds % 3600) % 60
+//        print(hr, min, sec)
+        var result = ""
+        if elapsed {
+            if hr > 0 {
+                result = String.init(format: "%d:%02d:02d", hr, min, sec)
+            } else {
+                result = String.init(format: "%d:%02d", min, sec)
+            }
+        } else {
+            if hr > 0 {
+                result = String.init(format: "-%d:%02d:02d", hr, min, sec)
+            } else {
+                result = String.init(format: "-%d:%02d", min, sec)
+            }
+        }
+        return result
     }
-    
-    func updatePlayPause(with isPlaying: Bool) {
+
+}
+
+extension ACMConcertPlayerViewController: ACMConcertSocketDelegate {
+    func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceivePlayStateUpdate isPlaying: Bool) {
         let image = isPlaying ? #imageLiteral(resourceName: "pause") : #imageLiteral(resourceName: "play")
         self.playPauseButton.setImage(image, for: .normal)
+        if !isPlaying {
+            timer?.invalidate()
+        }
     }
     
-    func updateVolume(with slider: Int) {
-        self.volumeSlider.value = Float(slider)
+    func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceiveVolumeUpdate newVolume: Int) {
+        self.volumeSlider.value = Float(newVolume)
     }
-
-    func update(artworkImage: UIImage?, withBlurredArtworkImage blurredArtworkImage: UIImage?) {
-        artworkImageView.image = artworkImage
-        backgroundArtworkImageView.image = blurredArtworkImage
+    
+    func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceiveProgressUpdate progress: Int, didReceiveDurationUpdate duration: Int) {
+        self.duration = duration
+        self.progress = progress
+        if timer?.isValid != true {
+            timer = Timer.scheduledTimer(
+                timeInterval: 1,
+                target: self,
+                selector: #selector(updateProgress),
+                userInfo: nil,
+                repeats: true
+            )
+        }
     }
-
-    func updateColors(with colors: [UIColor]?) {
-        infoLabel.textColor = colors?[0]
-        progressBar.tintColor = colors?[4]
-        volumeSlider.tintColor = colors?[4]
-        
-        playPauseButton.tintColor = colors?[2]
-        skipButton.tintColor = colors?[2]
-        viewQueueButton.tintColor = colors?[2]
+    
+    func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceiveInfoLabel trackName: String?) {
+        infoLabel.text = trackName
+    }
+    
+    func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceiveNewArtwork url: URL?) {
+        updateArtwork(with: url)
     }
 }
