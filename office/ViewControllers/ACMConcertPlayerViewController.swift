@@ -98,7 +98,8 @@ final class ACMConcertPlayerViewController: UIViewController {
 //
     @IBAction func didChangeVolume() {
         let volume = Int(volumeSlider.value)
-        socketManager.defaultSocket.emit("volume", volume)
+        print(volume)
+        acmConcertSocket.sendVolumeChanged(with: volume)
     }
     
     func updateArtwork(with url: URL?) {

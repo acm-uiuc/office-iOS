@@ -48,6 +48,11 @@ public final class ACMConcertSocket {
         socketManager.disconnect()
     }
     
+    func sendVolumeChanged(with newVolume: Int) {
+        socketManager.defaultSocket.emit("volume", newVolume)
+        print("emitting")
+    }
+    
     // MARK: Handlers
     func handleConnection(dataArray: [Any], ack: SocketAckEmitter) {
         print("handle connection a")

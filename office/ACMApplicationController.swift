@@ -13,7 +13,7 @@ class ACMApplicationController {
     static let shared = ACMApplicationController()
     private init() { }
 
-    var session: ConcertSession?
+    var session: ACMSession?
 
 }
 
@@ -22,5 +22,5 @@ struct ACMSession: APIReturnable, Decodable {
 }
 
 struct ConcertSession: APIReturnable, Decodable {
-    
+    let session: String
 }
