@@ -85,8 +85,12 @@ class ACMLoginViewController: ACMBaseViewController {
         ConcertService.createSessionFor(user: netID, withPassword: password)
         .onCompletion { result in
             switch result {
-            case .success(let session, let cookies):
-                ACMApplicationController.shared.session = session
+            case .success(_, let cookies):
+                ACMApplicationController.shared.cookies = cookies
+                var extractedCookies = [HTTPCookie]()
+                let headers = HTTPCookie.cookies(withResponseHeaderFields: ACMApplicationController.shared.cookies as! [String : String], for: URL(string: "https://concert.acm.illinois.edu")!)
+                
+                ACMApplicationController.shared.extractedCookies = headers
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: "showConcertPlayer", sender: nil)
                 }

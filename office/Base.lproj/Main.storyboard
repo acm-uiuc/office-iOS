@@ -160,6 +160,9 @@
                                                     <constraint firstAttribute="width" constant="60" id="b6S-kd-xd5"/>
                                                 </constraints>
                                                 <state key="normal" image="play"/>
+                                                <connections>
+                                                    <action selector="didTogglePlayPause" destination="YY9-tT-xM0" eventType="touchUpInside" id="vyP-In-WGM"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hsV-rb-Q2J">
                                                 <rect key="frame" x="160" y="0.0" width="60" height="60"/>
@@ -169,6 +172,9 @@
                                                 </constraints>
                                                 <inset key="imageEdgeInsets" minX="15" minY="15" maxX="15" maxY="15"/>
                                                 <state key="normal" image="next"/>
+                                                <connections>
+                                                    <action selector="didSkipSong" destination="YY9-tT-xM0" eventType="touchUpInside" id="XrN-wn-YhG"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>

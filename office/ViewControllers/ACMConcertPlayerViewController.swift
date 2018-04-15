@@ -93,14 +93,19 @@ final class ACMConcertPlayerViewController: UIViewController {
     }
 
     // MARK: Actions
-//    @IBAction func button() {
-//        socketManager.defaultSocket.emit("pause")
-//    }
-//
+    @IBAction func didTogglePlayPause() {
+        print("pause/play toggled")
+        acmConcertSocket.sendPlayPauseEvent(withProgress: progress, withDuration: duration)
+    }
+
     @IBAction func didChangeVolume() {
         let volume = Int(volumeSlider.value)
         print(volume)
-        acmConcertSocket.sendVolumeChanged(with: volume)
+        acmConcertSocket.sendVolumeChangeEvent(with: volume)
+    }
+    
+    @IBAction func didSkipSong() {
+        acmConcertSocket.sendSkipEvent()
     }
     
     func updateArtwork(with url: URL?) {
@@ -125,7 +130,7 @@ final class ACMConcertPlayerViewController: UIViewController {
         if progress >= duration {
             timer?.invalidate()
         }
-        print(progress, duration)
+//        print(progress, duration)
         let fraction = Float(progress) / Float(duration)
 //        print(fraction)
         DispatchQueue.main.async { [weak self] in

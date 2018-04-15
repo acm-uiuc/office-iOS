@@ -14,6 +14,8 @@ class ACMApplicationController {
     private init() { }
 
     var session: ACMSession?
+    var cookies: HTTPCookies?
+    var extractedCookies: [HTTPCookie]?
 
 }
 

@@ -19,15 +19,13 @@ public protocol ACMConcertSocketDelegate: class {
 
 public final class ACMConcertSocket {
     weak private var delegate: ACMConcertSocketDelegate?
-    
-    private let socketManager = SocketManager(socketURL: URL(string: "https://concert.acm.illinois.edu")!)
+    private let socketManager = SocketManager(socketURL: URL(string: "https://concert.acm.illinois.edu")!, config: [SocketIOClientOption.cookies(ACMApplicationController.shared.extractedCookies!)])
+    let jsonDecoder = JSONDecoder()
     
     public init(delegate: ACMConcertSocketDelegate? = nil) {
         self.delegate = delegate
         configureSocket()
     }
-    
-    let jsonDecoder = JSONDecoder()
     
     // MARK: Socket Init
     func configureSocket() {
@@ -48,9 +46,21 @@ public final class ACMConcertSocket {
         socketManager.disconnect()
     }
     
-    func sendVolumeChanged(with newVolume: Int) {
+    func sendVolumeChangeEvent(with newVolume: Int) {
         socketManager.defaultSocket.emit("volume", newVolume)
-        print("emitting")
+//        print("emitting volume \(newVolume)")
+    }
+    
+    func sendPlayPauseEvent(withProgress progress: Int, withDuration duration: Int) {
+        socketManager.defaultSocket.emit("pause")
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.delegate?.acmConcertSocket(strongSelf, didReceiveProgressUpdate: progress, didReceiveDurationUpdate: duration)
+        }
+    }
+    
+    func sendSkipEvent() {
+        socketManager.defaultSocket.emit("skip")
     }
     
     // MARK: Handlers
@@ -117,27 +127,4 @@ public final class ACMConcertSocket {
             strongSelf.delegate?.acmConcertSocket(strongSelf, didReceivePlayStateUpdate: displayIsPlaying)
         }
     }
-    
-//    func handlePlay(dataArray: [Any], ack: SocketAckEmitter) {
-//        print("handle play a")
-//
-//        guard let jsonString = dataArray.first as? String,
-//            let jsonData = jsonString.data(using: .utf8),
-//            let status = try? jsonDecoder.decode(ACMConcertOnPlay.self, from: jsonData) else { return }
-//
-//        print("handle play b")
-//
-//        let isPlaying = status.isPlaying,
-//        audioStatus = status.audioStatus
-//        let displayIsPlaying = isPlaying && (audioStatus == "State.Playing" || audioStatus == "State.Opening")
-//        let url = URL.init(string: "http://concert.acm.illinois.edu/" + status.thumbnail)
-//
-//        DispatchQueue.main.async { [weak self] in
-//            guard let strongSelf = self else { return }
-//            strongSelf.delegate?.acmConcertSocket(strongSelf, didReceivePlayStateUpdate: displayIsPlaying)
-//            strongSelf.delegate?.acmConcertSocket(strongSelf, didReceiveProgressUpdate: status.currentTime/1000, didReceiveDurationUpdate: status.duration/1000)
-//            strongSelf.delegate?.acmConcertSocket(strongSelf, didReceiveInfoLabel: status.currentTrack)
-//            strongSelf.delegate?.acmConcertSocket(strongSelf, didReceiveNewArtwork: url)
-//        }
-//    }
 }
