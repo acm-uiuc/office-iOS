@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		354EBDC5208541A30074AA8E /* ACMConcertQueueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354EBDC4208541A30074AA8E /* ACMConcertQueueViewController.swift */; };
 		3556965B207DD585004F1553 /* GrootSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3556965A207DD585004F1553 /* GrootSecrets.swift */; };
 		3556965D207EACA9004F1553 /* ConcertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3556965C207EACA9004F1553 /* ConcertService.swift */; };
 		3556965F208043FA004F1553 /* ACMConcertSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3556965E208043FA004F1553 /* ACMConcertSocket.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		354EBDC4208541A30074AA8E /* ACMConcertQueueViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACMConcertQueueViewController.swift; sourceTree = "<group>"; };
 		3556965A207DD585004F1553 /* GrootSecrets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GrootSecrets.swift; sourceTree = "<group>"; };
 		3556965C207EACA9004F1553 /* ConcertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcertService.swift; sourceTree = "<group>"; };
 		3556965E208043FA004F1553 /* ACMConcertSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACMConcertSocket.swift; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 				951D8A602030DD6C003AD47E /* ACMLoginViewController.swift */,
 				951D8A622030DDEA003AD47E /* ACMBaseViewController.swift */,
 				95FD06DE2030EE8800123388 /* ACMConcertPlayerViewController.swift */,
+				354EBDC4208541A30074AA8E /* ACMConcertQueueViewController.swift */,
 				3556965E208043FA004F1553 /* ACMConcertSocket.swift */,
 			);
 			path = ViewControllers;
@@ -275,6 +278,7 @@
 				959BB655207EADB9000EA75C /* UIImageExtensions.swift in Sources */,
 				95FD06DF2030EE8800123388 /* ACMConcertPlayerViewController.swift in Sources */,
 				951D8A612030DD6C003AD47E /* ACMLoginViewController.swift in Sources */,
+				354EBDC5208541A30074AA8E /* ACMConcertQueueViewController.swift in Sources */,
 				951D8A5E2030DABE003AD47E /* GrootService.swift in Sources */,
 				951D8A492030D8D9003AD47E /* AppDelegate.swift in Sources */,
 				3556965D207EACA9004F1553 /* ConcertService.swift in Sources */,

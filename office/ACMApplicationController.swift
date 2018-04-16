@@ -13,9 +13,9 @@ class ACMApplicationController {
     static let shared = ACMApplicationController()
     private init() { }
 
-    var session: ACMSession?
-    var cookies: HTTPCookies?
-    var extractedCookies: [HTTPCookie]?
+//    var session: ACMSession?
+//    var cookies: HTTPCookies?
+    var extractedCookies = [HTTPCookie]()
 
 }
 

@@ -96,16 +96,16 @@ final class ACMConcertPlayerViewController: UIViewController {
 
     // MARK: Actions
     @IBAction func didTogglePlayPause() {
-        acmConcertSocket.sendPlayPauseEvent(withProgress: progress, withDuration: duration)
+        acmConcertSocket.send(event: .pause)
     }
 
     @IBAction func didChangeVolume() {
-        let volume = Int(volumeSlider.value)
-        acmConcertSocket.sendVolumeChangeEvent(with: volume)
+        let value = Int(volumeSlider.value)
+        acmConcertSocket.send(event: .volume(value))
     }
 
     @IBAction func didSkipSong() {
-        acmConcertSocket.sendSkipEvent()
+        acmConcertSocket.send(event: .skip)
     }
 
     func updateArtwork(with url: URL?) {
@@ -200,7 +200,18 @@ extension ACMConcertPlayerViewController: ACMConcertSocketDelegate {
         self.playPauseButton.setImage(image, for: .normal)
         if !isPlaying {
             timer?.invalidate()
+        } else {
+            if timer?.isValid != true {
+                timer = Timer.scheduledTimer(
+                    timeInterval: 1,
+                    target: self,
+                    selector: #selector(updateProgress),
+                    userInfo: nil,
+                    repeats: true
+                )
+            }
         }
+        
     }
 
     func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceiveVolumeUpdate newVolume: Int) {
@@ -210,15 +221,6 @@ extension ACMConcertPlayerViewController: ACMConcertSocketDelegate {
     func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceiveProgressUpdate progress: Int, didReceiveDurationUpdate duration: Int) {
         self.duration = duration
         self.progress = progress
-        if timer?.isValid != true {
-            timer = Timer.scheduledTimer(
-                timeInterval: 1,
-                target: self,
-                selector: #selector(updateProgress),
-                userInfo: nil,
-                repeats: true
-            )
-        }
     }
 
     func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceiveInfoLabel trackName: String?) {

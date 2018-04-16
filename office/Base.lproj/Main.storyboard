@@ -8,6 +8,7 @@
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="Segues with Peek and Pop" minToolsVersion="7.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -118,6 +119,52 @@
             </objects>
             <point key="canvasLocation" x="938" y="-63"/>
         </scene>
+        <!--Concert Queue View Controller-->
+        <scene sceneID="VgH-pZ-1IA">
+            <objects>
+                <viewController id="6rR-uP-UpC" customClass="ACMConcertQueueViewController" customModule="office" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="czd-V1-Tkw">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wuc-9r-vfh">
+                                <rect key="frame" x="16" y="20" width="54" height="30"/>
+                                <state key="normal" title="Dismiss"/>
+                                <connections>
+                                    <action selector="dismiss" destination="6rR-uP-UpC" eventType="touchUpInside" id="DQI-Db-Nlx"/>
+                                </connections>
+                            </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Lwk-Zp-boQ">
+                                <rect key="frame" x="0.0" y="50" width="320" height="518"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="queueCell" id="JHn-lN-2Rq">
+                                        <rect key="frame" x="0.0" y="28" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="JHn-lN-2Rq" id="eQV-JJ-x2y">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="hMv-G8-UEi" firstAttribute="bottom" secondItem="Lwk-Zp-boQ" secondAttribute="bottom" id="AiJ-Xa-Z34"/>
+                            <constraint firstItem="Lwk-Zp-boQ" firstAttribute="leading" secondItem="hMv-G8-UEi" secondAttribute="leading" id="SY2-7K-aqm"/>
+                            <constraint firstItem="hMv-G8-UEi" firstAttribute="trailing" secondItem="Lwk-Zp-boQ" secondAttribute="trailing" id="X3r-ra-20b"/>
+                            <constraint firstItem="Wuc-9r-vfh" firstAttribute="top" secondItem="hMv-G8-UEi" secondAttribute="top" id="Yzb-Av-5C8"/>
+                            <constraint firstItem="Wuc-9r-vfh" firstAttribute="leading" secondItem="hMv-G8-UEi" secondAttribute="leading" constant="16" id="hW2-iH-VKs"/>
+                            <constraint firstItem="Lwk-Zp-boQ" firstAttribute="top" secondItem="Wuc-9r-vfh" secondAttribute="bottom" id="lwm-Lv-aRg"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="hMv-G8-UEi"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Uix-Ne-7zw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2529" y="-63"/>
+        </scene>
         <!--Concert-->
         <scene sceneID="x67-ou-ePM">
             <objects>
@@ -152,6 +199,12 @@
                                                 </constraints>
                                                 <inset key="imageEdgeInsets" minX="15" minY="15" maxX="15" maxY="15"/>
                                                 <state key="normal" image="playlist"/>
+                                                <connections>
+                                                    <segue destination="6rR-uP-UpC" kind="presentation" id="Rzv-fC-JhP">
+                                                        <segue key="commit" inheritsFrom="parent" id="vQh-An-5oA"/>
+                                                        <segue key="preview" inheritsFrom="commit" id="izH-Oh-f47"/>
+                                                    </segue>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dg6-l7-MjS">
                                                 <rect key="frame" x="80" y="0.0" width="60" height="60"/>
@@ -300,7 +353,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0qS-qN-O7R" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1824.8" y="-63.546798029556655"/>
+            <point key="canvasLocation" x="1731" y="-63"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="G6Y-ZG-wz9">
@@ -326,4 +379,7 @@
         <image name="play" width="60" height="60"/>
         <image name="playlist" width="60" height="60"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="Rzv-fC-JhP"/>
+    </inferredMetricsTieBreakers>
 </document>

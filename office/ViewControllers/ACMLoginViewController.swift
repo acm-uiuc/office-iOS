@@ -72,7 +72,7 @@ class ACMLoginViewController: ACMBaseViewController {
 
         guard netID != "" && password != "" else {
             let alertViewController = UIAlertController(title: "Incomplete", message: nil, preferredStyle: .alert)
-            alertViewController.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            alertViewController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             present(alertViewController, animated: true, completion: nil)
             return
         }
@@ -86,9 +86,11 @@ class ACMLoginViewController: ACMBaseViewController {
         .onCompletion { result in
             switch result {
             case .success(_, let cookies):
-                ACMApplicationController.shared.cookies = cookies
-                var extractedCookies = [HTTPCookie]()
-                let headers = HTTPCookie.cookies(withResponseHeaderFields: ACMApplicationController.shared.cookies as! [String : String], for: URL(string: "https://concert.acm.illinois.edu")!)
+                let connectionURL = URL(string: "https://concert.acm.illinois.edu")!
+                let headers = HTTPCookie.cookies(
+                    withResponseHeaderFields: cookies as! [String : String],
+                    for: connectionURL
+                )
                 
                 ACMApplicationController.shared.extractedCookies = headers
                 DispatchQueue.main.async {
@@ -97,7 +99,7 @@ class ACMLoginViewController: ACMBaseViewController {
             case .cancellation: break
             case .failure(let error):
                 let alertViewController = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-                alertViewController.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+                alertViewController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 DispatchQueue.main.async {
                     self.present(alertViewController, animated: true, completion: nil)
                 }

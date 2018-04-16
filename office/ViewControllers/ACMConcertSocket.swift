@@ -18,16 +18,27 @@ public protocol ACMConcertSocketDelegate: class {
 }
 
 public final class ACMConcertSocket {
-    weak private var delegate: ACMConcertSocketDelegate?
-    private let socketManager = SocketManager(socketURL: URL(string: "https://concert.acm.illinois.edu")!, config: [SocketIOClientOption.cookies(ACMApplicationController.shared.extractedCookies!)])
-    let jsonDecoder = JSONDecoder()
+    public enum Event {
+        case volume(Int)
+        case pause
+        case skip
+    }
     
+    private weak var delegate: ACMConcertSocketDelegate?
+    private let socketURL = URL(string: "https://concert.acm.illinois.edu")!
+    
+    private lazy var socketManager = SocketManager(
+        socketURL: socketURL,
+        config: [SocketIOClientOption.cookies(ACMApplicationController.shared.extractedCookies)]
+    )
+    let jsonDecoder = JSONDecoder()
+
     public init(delegate: ACMConcertSocketDelegate? = nil) {
         self.delegate = delegate
         configureSocket()
     }
 
-    // MARK: Socket Init
+    // MARK: Socket Actions
     func configureSocket() {
         socketManager.defaultSocket.on("connected",      callback: handleConnection)
         socketManager.defaultSocket.on("heartbeat",      callback: handleConnection)
@@ -51,30 +62,25 @@ public final class ACMConcertSocket {
         #endif
         socketManager.disconnect()
     }
-
-    func sendVolumeChangeEvent(with newVolume: Int) {
-        #if DEBUG
-            print("emit new volume \(newVolume)")
-        #endif
-        socketManager.defaultSocket.emit("volume", newVolume)
-    }
-
-    func sendPlayPauseEvent(withProgress progress: Int, withDuration duration: Int) {
-        #if DEBUG
-            print("emit pause")
-        #endif
-        socketManager.defaultSocket.emit("pause")
-        DispatchQueue.main.async { [weak self] in
-            guard let strongSelf = self else { return }
-            strongSelf.delegate?.acmConcertSocket(strongSelf, didReceiveProgressUpdate: progress, didReceiveDurationUpdate: duration)
+    
+    func send(event: Event) {
+        switch event {
+        case .volume(let value):
+            #if DEBUG
+                print("emit new volume \(value)")
+            #endif
+            socketManager.defaultSocket.emit("volume", value)
+        case .pause:
+            #if DEBUG
+                print("emit pause")
+            #endif
+            socketManager.defaultSocket.emit("pause")
+        case .skip:
+            #if DEBUG
+                print("emit skip")
+            #endif
+            socketManager.defaultSocket.emit("skip")
         }
-    }
-
-    func sendSkipEvent() {
-        #if DEBUG
-            print("emit skip")
-        #endif
-        socketManager.defaultSocket.emit("skip")
     }
 
     // MARK: Handlers
@@ -86,16 +92,16 @@ public final class ACMConcertSocket {
         let isPlaying = status.isPlaying,
         audioStatus = status.audioStatus
         let displayIsPlaying = isPlaying && (audioStatus == "State.Playing" || audioStatus == "State.Opening")
-        
+
         let url = URL.init(string: "http://concert.acm.illinois.edu/" + status.thumbnail)
-        
+
         #if DEBUG
             print("playing: \(displayIsPlaying)")
             print("thumbnail url: \(url?.absoluteString)")
-            print("progress: \(status.currentTime)", "duration: \(status.duration)")
+            print("progress: \(status.currentTime/1000)", "duration: \(status.duration/1000)")
             print("song: \(status.currentTrack)")
         #endif
-        
+
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
 
@@ -121,7 +127,6 @@ public final class ACMConcertSocket {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
             strongSelf.delegate?.acmConcertSocket(strongSelf, didReceiveVolumeUpdate: volume)
-            
         }
     }
     
