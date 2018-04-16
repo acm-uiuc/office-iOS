@@ -36,6 +36,8 @@ final class ACMConcertPlayerViewController: UIViewController {
     var timer: Timer?
     var duration = 1
     var progress = 1
+    var pauseImage = #imageLiteral(resourceName: "pause")
+    var playImage = #imageLiteral(resourceName: "play")
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -94,23 +96,23 @@ final class ACMConcertPlayerViewController: UIViewController {
 
     // MARK: Actions
     @IBAction func didTogglePlayPause() {
-        print("pause/play toggled")
         acmConcertSocket.sendPlayPauseEvent(withProgress: progress, withDuration: duration)
     }
 
     @IBAction func didChangeVolume() {
         let volume = Int(volumeSlider.value)
-        print(volume)
         acmConcertSocket.sendVolumeChangeEvent(with: volume)
     }
-    
+
     @IBAction func didSkipSong() {
         acmConcertSocket.sendSkipEvent()
     }
-    
+
     func updateArtwork(with url: URL?) {
+        guard let unwrappedUrl = url else { return }
+
         DispatchQueue.global(qos: .userInitiated).async {
-            URLSession.shared.dataTask(with: url!) { data, response, error in
+            URLSession.shared.dataTask(with: unwrappedUrl) { data, response, error in
                 guard let data = data else { return }
 
                 let image = UIImage(data: data)
@@ -120,19 +122,20 @@ final class ACMConcertPlayerViewController: UIViewController {
                 DispatchQueue.main.async { [weak self] in
                     self?.artworkImageView.image = image
                     self?.backgroundArtworkImageView.image = blurredImage
-                    self?.updateColors(with: colors)
+                    self?.update(colors: colors)
                 }
             }.resume()
         }
     }
-    
+
     @objc func updateProgress() {
         if progress >= duration {
             timer?.invalidate()
         }
-//        print(progress, duration)
         let fraction = Float(progress) / Float(duration)
-//        print(fraction)
+        #if DEBUG
+            print("progress fraction: \(fraction)")
+        #endif
         DispatchQueue.main.async { [weak self] in
             self?.progressBar.setProgress(fraction, animated: false)
         }
@@ -146,14 +149,13 @@ final class ACMConcertPlayerViewController: UIViewController {
         progress += 1
     }
 
-    func updateColors(with colors: UIImageColors?) {
+    func update(colors: UIImageColors?) {
         infoLabel.textColor = colors?.primary
         progressBar.progressTintColor = colors?.secondary
         progressBar.trackTintColor = colors?.detail
         volumeSlider.maximumTrackTintColor = colors?.detail
         volumeSlider.minimumTrackTintColor = colors?.secondary
-        
-        
+
         playPauseButton.tintColor = colors?.secondary
         skipButton.tintColor = colors?.secondary
         viewQueueButton.tintColor = colors?.secondary
@@ -168,12 +170,14 @@ final class ACMConcertPlayerViewController: UIViewController {
         waveView.realWaveColor = colors?.background.withAlphaComponent(waveAlpha) ?? UIColor.white.withAlphaComponent(waveAlpha)
         waveView.maskWaveColor = colors?.background?.withAlphaComponent(waveAlpha) ?? UIColor.white.withAlphaComponent(waveAlpha)
     }
-    
+
     func secondsToHoursMinutesSeconds(seconds: Int, elapsed: Bool) -> String {
         let hr = seconds / 3600
         let min = (seconds % 3600) / 60
         let sec = (seconds % 3600) % 60
-        
+        #if DEBUG
+            print("hr: \(hr) min: \(min) sec: \(sec)")
+        #endif
         if elapsed {
             if hr > 0 {
                 return String.init(format: "%d:%02d:%02d", hr, min, sec)
@@ -188,12 +192,11 @@ final class ACMConcertPlayerViewController: UIViewController {
             }
         }
     }
-
 }
 
 extension ACMConcertPlayerViewController: ACMConcertSocketDelegate {
     func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceivePlayStateUpdate isPlaying: Bool) {
-        let image = isPlaying ? #imageLiteral(resourceName: "pause") : #imageLiteral(resourceName: "play")
+        let image = isPlaying ? pauseImage : playImage
         self.playPauseButton.setImage(image, for: .normal)
         if !isPlaying {
             timer?.invalidate()
@@ -217,11 +220,11 @@ extension ACMConcertPlayerViewController: ACMConcertSocketDelegate {
             )
         }
     }
-    
+
     func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceiveInfoLabel trackName: String?) {
         infoLabel.text = trackName
     }
-    
+
     func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceiveNewArtwork url: URL?) {
         updateArtwork(with: url)
     }

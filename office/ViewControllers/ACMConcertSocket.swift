@@ -26,7 +26,7 @@ public final class ACMConcertSocket {
         self.delegate = delegate
         configureSocket()
     }
-    
+
     // MARK: Socket Init
     func configureSocket() {
         socketManager.defaultSocket.on("connected",      callback: handleConnection)
@@ -37,47 +37,64 @@ public final class ACMConcertSocket {
         socketManager.defaultSocket.on("played",         callback: handleConnection)
         socketManager.defaultSocket.on("stopped",        callback: handlePause)
     }
-    
+
     @objc public func setupSocket() {
+        #if DEBUG
+            print("setting up socket")
+        #endif
         socketManager.connect()
     }
-    
+
     @objc public func teardownSocket() {
+        #if DEBUG
+            print("tearing down socket")
+        #endif
         socketManager.disconnect()
     }
-    
+
     func sendVolumeChangeEvent(with newVolume: Int) {
+        #if DEBUG
+            print("emit new volume \(newVolume)")
+        #endif
         socketManager.defaultSocket.emit("volume", newVolume)
-//        print("emitting volume \(newVolume)")
     }
-    
+
     func sendPlayPauseEvent(withProgress progress: Int, withDuration duration: Int) {
+        #if DEBUG
+            print("emit pause")
+        #endif
         socketManager.defaultSocket.emit("pause")
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
             strongSelf.delegate?.acmConcertSocket(strongSelf, didReceiveProgressUpdate: progress, didReceiveDurationUpdate: duration)
         }
     }
-    
+
     func sendSkipEvent() {
+        #if DEBUG
+            print("emit skip")
+        #endif
         socketManager.defaultSocket.emit("skip")
     }
-    
+
     // MARK: Handlers
     func handleConnection(dataArray: [Any], ack: SocketAckEmitter) {
-        print("handle connection a")
-        
         guard let jsonString = dataArray.first as? String,
             let jsonData = jsonString.data(using: .utf8),
             let status = try? jsonDecoder.decode(ACMConcertOnConnect.self, from: jsonData) else { return }
-        
-        print("handle connection b")
-        
+
         let isPlaying = status.isPlaying,
         audioStatus = status.audioStatus
         let displayIsPlaying = isPlaying && (audioStatus == "State.Playing" || audioStatus == "State.Opening")
         
         let url = URL.init(string: "http://concert.acm.illinois.edu/" + status.thumbnail)
+        
+        #if DEBUG
+            print("playing: \(displayIsPlaying)")
+            print("thumbnail url: \(url?.absoluteString)")
+            print("progress: \(status.currentTime)", "duration: \(status.duration)")
+            print("song: \(status.currentTrack)")
+        #endif
         
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
@@ -91,15 +108,15 @@ public final class ACMConcertSocket {
     }
     
     func handleVolume(dataArray: [Any], ack: SocketAckEmitter) {
-        print("handle volume a")
-        
         guard let jsonString = dataArray.first as? String,
             let jsonData = jsonString.data(using: .utf8),
             let status = try? jsonDecoder.decode(ACMConcertVolume.self, from: jsonData) else { return }
         
-        print("handle volume b")
-        
         let volume = status.volume
+        
+        #if DEBUG
+            print("received volume: \(volume)")
+        #endif
         
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
@@ -109,18 +126,17 @@ public final class ACMConcertSocket {
     }
     
     func handlePause(dataArray: [Any], ack: SocketAckEmitter) {
-        print("handle pause a")
-        
         guard let jsonString = dataArray.first as? String,
             let jsonData = jsonString.data(using: .utf8),
             let status = try? jsonDecoder.decode(ACMConcertOnPause.self, from: jsonData) else { return }
         
-        print("handle pause b")
-        
         let isPlaying = status.isPlaying,
         audioStatus = status.audioStatus
         let displayIsPlaying = isPlaying && (audioStatus == "State.Playing" || audioStatus == "State.Opening")
-        print(displayIsPlaying)
+        
+        #if DEBUG
+            print("playing: \(displayIsPlaying)")
+        #endif
         
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
