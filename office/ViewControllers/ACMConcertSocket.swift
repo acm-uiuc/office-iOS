@@ -93,7 +93,7 @@ public final class ACMConcertSocket {
         audioStatus = status.audioStatus
         let displayIsPlaying = isPlaying && (audioStatus == "State.Playing" || audioStatus == "State.Opening")
 
-        let url = URL.init(string: "http://concert.acm.illinois.edu/" + status.thumbnail)
+        let url = URL(string: "http://concert.acm.illinois.edu/" + status.thumbnail)
 
         #if DEBUG
             print("playing: \(displayIsPlaying)")

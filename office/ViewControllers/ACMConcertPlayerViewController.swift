@@ -180,15 +180,15 @@ final class ACMConcertPlayerViewController: UIViewController {
         #endif
         if elapsed {
             if hr > 0 {
-                return String.init(format: "%d:%02d:%02d", hr, min, sec)
+                return String(format: "%d:%02d:%02d", hr, min, sec)
             } else {
-                return String.init(format: "%d:%02d", min, sec)
+                return String(format: "%d:%02d", min, sec)
             }
         } else {
             if hr > 0 {
-                return String.init(format: "-%d:%02d:%02d", hr, min, sec)
+                return String(format: "-%d:%02d:%02d", hr, min, sec)
             } else {
-                return String.init(format: "-%d:%02d", min, sec)
+                return String(format: "-%d:%02d", min, sec)
             }
         }
     }

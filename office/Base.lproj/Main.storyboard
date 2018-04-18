@@ -112,7 +112,7 @@
                         <outlet property="loginButton" destination="VOg-8Z-lBe" id="AFq-O9-KPo"/>
                         <outlet property="netIDField" destination="OKc-Lc-Cu4" id="Zhu-cj-X2b"/>
                         <outlet property="passwordField" destination="Fvx-RC-rDr" id="agQ-0F-vpP"/>
-                        <segue destination="YY9-tT-xM0" kind="show" identifier="showConcertPlayer" id="sx2-ZM-Y0H"/>
+                        <segue destination="YY9-tT-xM0" kind="presentation" identifier="showConcertPlayer" id="sx2-ZM-Y0H"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ywb-Zj-L0L" sceneMemberID="firstResponder"/>
