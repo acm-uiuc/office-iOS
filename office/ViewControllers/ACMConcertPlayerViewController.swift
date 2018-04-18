@@ -56,10 +56,9 @@ final class ACMConcertPlayerViewController: UIViewController {
 
         artworkImageContainerView.layer.shadowColor = UIColor.black.cgColor
         artworkImageContainerView.layer.shadowOffset = .zero
-        artworkImageContainerView.layer.shadowRadius = 12.0
-        artworkImageContainerView.layer.shadowOpacity = 0.6
+        artworkImageContainerView.layer.shadowRadius = 20
+        artworkImageContainerView.layer.shadowOpacity = 0.5
         artworkImageContainerView.layer.masksToBounds = false
-        artworkImageContainerView.layer.shadowPath = UIBezierPath(roundedRect: artworkImageView.bounds, cornerRadius: artworkImageView.layer.cornerRadius).cgPath
 
         infoLabel.animationDelay = 2
         infoLabel.trailingBuffer = 24
@@ -70,6 +69,11 @@ final class ACMConcertPlayerViewController: UIViewController {
         volumeSlider.minimumValueImage = #imageLiteral(resourceName: "volumeLow")
         volumeSlider.maximumValueImage = #imageLiteral(resourceName: "volumeHigh")
         volumeSlider.tintColor = UIColor.gray
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        artworkImageContainerView.layer.shadowPath = UIBezierPath(roundedRect: artworkImageView.bounds, cornerRadius: artworkImageView.layer.cornerRadius).cgPath
     }
 
     override func viewWillAppear(_ animated: Bool) {
