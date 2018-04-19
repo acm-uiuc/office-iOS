@@ -70,7 +70,7 @@ final class ACMConcertPlayerViewController: UIViewController {
         volumeSlider.maximumValueImage = #imageLiteral(resourceName: "volumeHigh")
         volumeSlider.tintColor = UIColor.gray
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         artworkImageContainerView.layer.shadowPath = UIBezierPath(roundedRect: artworkImageView.bounds, cornerRadius: artworkImageView.layer.cornerRadius).cgPath
@@ -113,23 +113,35 @@ final class ACMConcertPlayerViewController: UIViewController {
     }
 
     func updateArtwork(with url: URL?) {
-        guard let unwrappedUrl = url else { return }
-
-        DispatchQueue.global(qos: .userInitiated).async {
-            URLSession.shared.dataTask(with: unwrappedUrl) { data, response, error in
-                guard let data = data else { return }
-
-                let image = UIImage(data: data)
-                let blurredImage = image?.blur(radius: 0.6)
-                let colors = image?.getColors()
-
-                DispatchQueue.main.async { [weak self] in
-                    self?.artworkImageView.image = image
-                    self?.backgroundArtworkImageView.image = blurredImage
-                    self?.update(colors: colors)
-                }
-            }.resume()
+        guard let url = url else {
+            resetArtworkToDefault()
+            return
         }
+
+        URLSession.shared.dataTask(with: url) { data, _, _ in
+            guard let data = data,
+                let image = UIImage(data: data),
+                let blurredImage = image.blur(radius: 0.6) else {
+                DispatchQueue.main.async { [weak self] in
+                    self?.resetArtworkToDefault()
+                }
+                return
+            }
+
+            let colors = image.getColors()
+            
+            DispatchQueue.main.async { [weak self] in
+                self?.artworkImageView.image = image
+                self?.backgroundArtworkImageView.image = blurredImage
+                self?.update(colors: colors)
+            }
+        }.resume()
+    }
+    
+    func resetArtworkToDefault() {
+        artworkImageView.image = nil
+        backgroundArtworkImageView.image = nil
+        update(colors: ACMApplicationController.shared.defaultPalette)
     }
 
     @objc func updateProgress() {
@@ -153,26 +165,26 @@ final class ACMConcertPlayerViewController: UIViewController {
         progress += 1
     }
 
-    func update(colors: UIImageColors?) {
-        infoLabel.textColor = colors?.primary
-        progressBar.progressTintColor = colors?.secondary
-        progressBar.trackTintColor = colors?.detail
-        volumeSlider.maximumTrackTintColor = colors?.detail
-        volumeSlider.minimumTrackTintColor = colors?.secondary
+    func update(colors: UIImageColors) {
+        infoLabel.textColor = colors.primary
+        progressBar.progressTintColor = colors.secondary
+        progressBar.trackTintColor = colors.detail
+        volumeSlider.maximumTrackTintColor = colors.detail
+        volumeSlider.minimumTrackTintColor = colors.secondary
 
-        playPauseButton.tintColor = colors?.secondary
-        skipButton.tintColor = colors?.secondary
-        viewQueueButton.tintColor = colors?.secondary
+        playPauseButton.tintColor = colors.secondary
+        skipButton.tintColor = colors.secondary
+        viewQueueButton.tintColor = colors.secondary
 
-        elapsedTimeLabel.textColor = colors?.secondary
-        remainingTimeLabel.textColor = colors?.secondary
+        elapsedTimeLabel.textColor = colors.secondary
+        remainingTimeLabel.textColor = colors.secondary
 
         let waveAlpha: CGFloat = 0.3
         let textViewAlpha = 1 - pow((1 - waveAlpha), 2)
 
-        textContainerView.backgroundColor = colors?.background.withAlphaComponent(textViewAlpha) ?? UIColor.white.withAlphaComponent(textViewAlpha)
-        waveView.realWaveColor = colors?.background.withAlphaComponent(waveAlpha) ?? UIColor.white.withAlphaComponent(waveAlpha)
-        waveView.maskWaveColor = colors?.background?.withAlphaComponent(waveAlpha) ?? UIColor.white.withAlphaComponent(waveAlpha)
+        textContainerView.backgroundColor = colors.background.withAlphaComponent(textViewAlpha)
+        waveView.realWaveColor = colors.background.withAlphaComponent(waveAlpha)
+        waveView.maskWaveColor = colors.background.withAlphaComponent(waveAlpha)
     }
 
     func secondsToHoursMinutesSeconds(seconds: Int, elapsed: Bool) -> String {
@@ -199,9 +211,13 @@ final class ACMConcertPlayerViewController: UIViewController {
 }
 
 extension ACMConcertPlayerViewController: ACMConcertSocketDelegate {
-    func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceivePlayStateUpdate isPlaying: Bool) {
+    func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceivePlayStateUpdate isPlaying: Bool, withState audioStatus: String) {
         let image = isPlaying ? pauseImage : playImage
         self.playPauseButton.setImage(image, for: .normal)
+        #if DEBUG
+        print("audioStatus: \(audioStatus)")
+        #endif
+        
         if !isPlaying {
             timer?.invalidate()
         } else {
@@ -215,13 +231,16 @@ extension ACMConcertPlayerViewController: ACMConcertSocketDelegate {
                 )
             }
         }
-        
+        if audioStatus == "State.NothingSpecial" {
+            resetArtworkToDefault()
+        }
+
     }
 
     func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceiveVolumeUpdate newVolume: Int) {
         self.volumeSlider.value = Float(newVolume)
     }
-    
+
     func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceiveProgressUpdate progress: Int, didReceiveDurationUpdate duration: Int) {
         self.duration = duration
         self.progress = progress

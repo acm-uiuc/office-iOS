@@ -10,7 +10,7 @@ import Foundation
 import SocketIO
 
 public protocol ACMConcertSocketDelegate: class {
-    func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceivePlayStateUpdate: Bool)
+    func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceivePlayStateUpdate: Bool, withState audioStatus: String)
     func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceiveVolumeUpdate: Int)
     func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceiveProgressUpdate progress: Int, didReceiveDurationUpdate duration: Int)
     func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceiveNewArtwork: URL?)
@@ -107,19 +107,19 @@ public final class ACMConcertSocket {
 
             strongSelf.delegate?.acmConcertSocket(strongSelf, didReceiveProgressUpdate: status.currentTime/1000, didReceiveDurationUpdate: status.duration/1000)
             strongSelf.delegate?.acmConcertSocket(strongSelf, didReceiveNewArtwork: url)
-            strongSelf.delegate?.acmConcertSocket(strongSelf, didReceivePlayStateUpdate: displayIsPlaying)
+            strongSelf.delegate?.acmConcertSocket(strongSelf, didReceivePlayStateUpdate: displayIsPlaying, withState: audioStatus)
             strongSelf.delegate?.acmConcertSocket(strongSelf, didReceiveVolumeUpdate: status.volume)
             strongSelf.delegate?.acmConcertSocket(strongSelf, didReceiveInfoLabel: status.currentTrack)
         }
     }
-    
+
     func handleVolume(dataArray: [Any], ack: SocketAckEmitter) {
         guard let jsonString = dataArray.first as? String,
             let jsonData = jsonString.data(using: .utf8),
             let status = try? jsonDecoder.decode(ACMConcertVolume.self, from: jsonData) else { return }
-        
+
         let volume = status.volume
-        
+
         #if DEBUG
             print("received volume: \(volume)")
         #endif
@@ -129,23 +129,23 @@ public final class ACMConcertSocket {
             strongSelf.delegate?.acmConcertSocket(strongSelf, didReceiveVolumeUpdate: volume)
         }
     }
-    
+
     func handlePause(dataArray: [Any], ack: SocketAckEmitter) {
         guard let jsonString = dataArray.first as? String,
             let jsonData = jsonString.data(using: .utf8),
             let status = try? jsonDecoder.decode(ACMConcertOnPause.self, from: jsonData) else { return }
-        
+
         let isPlaying = status.isPlaying,
         audioStatus = status.audioStatus
         let displayIsPlaying = isPlaying && (audioStatus == "State.Playing" || audioStatus == "State.Opening")
-        
+
         #if DEBUG
             print("playing: \(displayIsPlaying)")
         #endif
-        
+
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
-            strongSelf.delegate?.acmConcertSocket(strongSelf, didReceivePlayStateUpdate: displayIsPlaying)
+            strongSelf.delegate?.acmConcertSocket(strongSelf, didReceivePlayStateUpdate: displayIsPlaying, withState: audioStatus)
         }
     }
 }

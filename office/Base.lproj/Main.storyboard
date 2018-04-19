@@ -179,7 +179,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hq5-jx-R0s">
                                 <rect key="frame" x="0.0" y="358" width="320" height="210"/>
                                 <subviews>
-                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="qHO-YR-T6D">
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" minimumValueImage="volumeLow" maximumValueImage="volumeHigh" translatesAutoresizingMaskIntoConstraints="NO" id="qHO-YR-T6D">
                                         <rect key="frame" x="18" y="160" width="284" height="31"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="aAS-GI-Hzc"/>
@@ -249,7 +249,7 @@
                                     <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="CyG-gS-HCC">
                                         <rect key="frame" x="30" y="70" width="260" height="2"/>
                                     </progressView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Info Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XLZ-DE-T2Q" customClass="MarqueeLabel">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ACM Concert" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XLZ-DE-T2Q" customClass="MarqueeLabel">
                                         <rect key="frame" x="30" y="24" width="260" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="gSi-AX-AN7"/>
@@ -378,6 +378,8 @@
         <image name="next" width="60" height="60"/>
         <image name="play" width="60" height="60"/>
         <image name="playlist" width="60" height="60"/>
+        <image name="volumeHigh" width="20" height="20"/>
+        <image name="volumeLow" width="20" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Rzv-fC-JhP"/>

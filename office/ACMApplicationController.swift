@@ -8,6 +8,7 @@
 
 import Foundation
 import APIManager
+import UIImageColors
 
 class ACMApplicationController {
     static let shared = ACMApplicationController()
@@ -16,6 +17,12 @@ class ACMApplicationController {
 //    var session: ACMSession?
 //    var cookies: HTTPCookies?
     var extractedCookies = [HTTPCookie]()
+    var defaultPalette = UIImageColors(
+        background: UIColor.white,
+        primary: UIColor.black,
+        secondary: UIColor.blue,
+        detail: UIColor.black
+    )
 
 }
 
