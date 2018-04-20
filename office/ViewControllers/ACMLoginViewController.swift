@@ -112,6 +112,7 @@ class ACMLoginViewController: ACMBaseViewController {
                 
                 DispatchQueue.main.async {
                     self.present(passwordAlert, animated: true, completion: nil)
+//                    self.performSegue(withIdentifier: "showConcertPlayer", sender: nil)
                     
                 }
             case .cancellation: break

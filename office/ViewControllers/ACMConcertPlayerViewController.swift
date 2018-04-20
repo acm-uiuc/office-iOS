@@ -41,6 +41,20 @@ final class ACMConcertPlayerViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let amount = 30
+        
+        let horizontal = UIInterpolatingMotionEffect(keyPath: "center.x", type: .tiltAlongHorizontalAxis)
+        horizontal.minimumRelativeValue = -amount
+        horizontal.maximumRelativeValue = amount
+        
+        let vertical = UIInterpolatingMotionEffect(keyPath: "center.y", type: .tiltAlongVerticalAxis)
+        vertical.minimumRelativeValue = -amount
+        vertical.maximumRelativeValue = amount
+        
+        let group = UIMotionEffectGroup()
+        group.motionEffects = [horizontal, vertical]
+        backgroundArtworkImageView.addMotionEffect(group)
 
         waveView.realWaveColor = UIColor.white.withAlphaComponent(1)
         waveView.maskWaveColor = UIColor.white.withAlphaComponent(0.3)
