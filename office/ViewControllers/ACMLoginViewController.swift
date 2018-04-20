@@ -111,8 +111,8 @@ class ACMLoginViewController: ACMBaseViewController {
                 passwordAlert.addAction(yesOption)
                 
                 DispatchQueue.main.async {
-                    self.present(passwordAlert, animated: true, completion: nil)
-//                    self.performSegue(withIdentifier: "showConcertPlayer", sender: nil)
+//                    self.present(passwordAlert, animated: true, completion: nil)
+                    self.performSegue(withIdentifier: "showConcertPlayer", sender: nil)
                     
                 }
             case .cancellation: break

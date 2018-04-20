@@ -30,6 +30,8 @@ final class ACMConcertPlayerViewController: UIViewController {
     @IBOutlet weak var playPauseButton: UIButton!
     @IBOutlet weak var skipButton: UIButton!
     @IBOutlet weak var viewQueueButton: UIButton!
+    @IBOutlet weak var lowVolumeIcon: ACMTintImageView!
+    @IBOutlet weak var highVolumeIcon: ACMTintImageView!
 
 
     lazy var acmConcertSocket = ACMConcertSocket(delegate: self)
@@ -80,8 +82,8 @@ final class ACMConcertPlayerViewController: UIViewController {
 
         volumeSlider.minimumValue = 0
         volumeSlider.maximumValue = 100
-        volumeSlider.minimumValueImage = #imageLiteral(resourceName: "volumeLow")
-        volumeSlider.maximumValueImage = #imageLiteral(resourceName: "volumeHigh")
+//        volumeSlider.minimumValueImage = #imageLiteral(resourceName: "volumeLow")
+//        volumeSlider.maximumValueImage = #imageLiteral(resourceName: "volumeHigh")
         volumeSlider.tintColor = UIColor.gray
     }
 
@@ -155,6 +157,7 @@ final class ACMConcertPlayerViewController: UIViewController {
     func resetArtworkToDefault() {
         artworkImageView.image = nil
         backgroundArtworkImageView.image = nil
+        UIApplication.shared.statusBarStyle = .lightContent
         update(colors: ACMApplicationController.shared.defaultPalette)
     }
 
@@ -192,6 +195,12 @@ final class ACMConcertPlayerViewController: UIViewController {
 
         elapsedTimeLabel.textColor = colors.secondary
         remainingTimeLabel.textColor = colors.secondary
+        
+        UIApplication.shared.statusBarStyle = .lightContent
+        
+        lowVolumeIcon.tintColor = colors.secondary
+        highVolumeIcon.tintColor = colors.secondary
+        
 
         let waveAlpha: CGFloat = 0.3
         let textViewAlpha = 1 - pow((1 - waveAlpha), 2)

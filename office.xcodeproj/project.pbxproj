@@ -11,6 +11,7 @@
 		3556965B207DD585004F1553 /* GrootSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3556965A207DD585004F1553 /* GrootSecrets.swift */; };
 		3556965D207EACA9004F1553 /* ConcertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3556965C207EACA9004F1553 /* ConcertService.swift */; };
 		3556965F208043FA004F1553 /* ACMConcertSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3556965E208043FA004F1553 /* ACMConcertSocket.swift */; };
+		35A33778208A7D6000587822 /* ACMTintImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35A33777208A7D6000587822 /* ACMTintImageView.swift */; };
 		951D8A492030D8D9003AD47E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951D8A482030D8D9003AD47E /* AppDelegate.swift */; };
 		951D8A4E2030D8D9003AD47E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 951D8A4C2030D8D9003AD47E /* Main.storyboard */; };
 		951D8A502030D8D9003AD47E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 951D8A4F2030D8D9003AD47E /* Assets.xcassets */; };
@@ -33,6 +34,7 @@
 		3556965C207EACA9004F1553 /* ConcertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcertService.swift; sourceTree = "<group>"; };
 		3556965E208043FA004F1553 /* ACMConcertSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACMConcertSocket.swift; sourceTree = "<group>"; };
 		35A337762089311500587822 /* office.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = office.entitlements; sourceTree = "<group>"; };
+		35A33777208A7D6000587822 /* ACMTintImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACMTintImageView.swift; sourceTree = "<group>"; };
 		42F27291C350E7ED2D51E2A6 /* Pods-office.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-office.release.xcconfig"; path = "Pods/Target Support Files/Pods-office/Pods-office.release.xcconfig"; sourceTree = "<group>"; };
 		8A7B952881A9F5DDFF6AAFFF /* Pods_office.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_office.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		951D8A452030D8D9003AD47E /* office.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = office.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -134,6 +136,7 @@
 			isa = PBXGroup;
 			children = (
 				951D8A602030DD6C003AD47E /* ACMLoginViewController.swift */,
+				35A33777208A7D6000587822 /* ACMTintImageView.swift */,
 				951D8A622030DDEA003AD47E /* ACMBaseViewController.swift */,
 				95FD06DE2030EE8800123388 /* ACMConcertPlayerViewController.swift */,
 				354EBDC4208541A30074AA8E /* ACMConcertQueueViewController.swift */,
@@ -292,6 +295,7 @@
 				951D8A492030D8D9003AD47E /* AppDelegate.swift in Sources */,
 				3556965D207EACA9004F1553 /* ConcertService.swift in Sources */,
 				95FD06DD2030E11F00123388 /* ACMApplicationController.swift in Sources */,
+				35A33778208A7D6000587822 /* ACMTintImageView.swift in Sources */,
 				951D8A632030DDEA003AD47E /* ACMBaseViewController.swift in Sources */,
 				95FD06E52031264E00123388 /* ACMConcertPlayState.swift in Sources */,
 				95FD06E12031014700123388 /* ACMConcertStatus.swift in Sources */,
