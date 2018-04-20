@@ -9,6 +9,7 @@
 import Foundation
 import APIManager
 import UIImageColors
+import SwiftKeychainAccess
 
 class ACMApplicationController {
     static let shared = ACMApplicationController()
@@ -23,6 +24,7 @@ class ACMApplicationController {
         secondary: UIColor.blue,
         detail: UIColor.black
     )
+    let keychain = Keychain(serviceName: "concert.acm.illinois.edu")
 
 }
 
