@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import Keychain
+import SwiftKeychainAccess
 
 class ACMLoginViewController: ACMBaseViewController {
 
@@ -16,6 +16,8 @@ class ACMLoginViewController: ACMBaseViewController {
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var bottomLayoutConstraint: NSLayoutConstraint!
+    
+    
 
     // MARK: - UIViewController
     override func viewDidLoad() {
@@ -26,6 +28,9 @@ class ACMLoginViewController: ACMBaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        netIDField.textContentType = .username
+        passwordField.textContentType = .password
+        
         netIDField.text = nil
         passwordField.text = nil
 
@@ -94,8 +99,20 @@ class ACMLoginViewController: ACMBaseViewController {
                 )
                 
                 ACMApplicationController.shared.extractedCookies = headers
-                DispatchQueue.main.async {
+                let passwordAlert = UIAlertController(title: "Save Password?", message: "asdfasdfasdfasdfasdf", preferredStyle: UIAlertControllerStyle.alert)
+                let yesOption = UIAlertAction(title: "Yes", style: .default) { _ in
+                    ACMApplicationController.shared.keychain.store(password, forKey: netID)
                     self.performSegue(withIdentifier: "showConcertPlayer", sender: nil)
+                }
+                let noOption = UIAlertAction(title: "No", style: .default){ _ in
+                    self.performSegue(withIdentifier: "showConcertPlayer", sender: nil)
+                }
+                passwordAlert.addAction(noOption)
+                passwordAlert.addAction(yesOption)
+                
+                DispatchQueue.main.async {
+                    self.present(passwordAlert, animated: true, completion: nil)
+                    
                 }
             case .cancellation: break
             case .failure(let error):
