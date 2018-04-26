@@ -180,7 +180,7 @@
                                 <rect key="frame" x="0.0" y="358" width="320" height="210"/>
                                 <subviews>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="qHO-YR-T6D">
-                                        <rect key="frame" x="50" y="160" width="220" height="31"/>
+                                        <rect key="frame" x="46" y="160" width="228" height="31"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="aAS-GI-Hzc"/>
                                         </constraints>
@@ -259,14 +259,16 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="volumeHigh" translatesAutoresizingMaskIntoConstraints="NO" id="dBr-0v-zvj" customClass="ACMTintImageView" customModule="office" customModuleProvider="target">
-                                        <rect key="frame" x="284" y="166" width="16" height="20"/>
+                                        <rect key="frame" x="280" y="168" width="16" height="16"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="16" id="vnd-7O-sBD"/>
+                                            <constraint firstAttribute="height" constant="16" id="xid-oe-Ng4"/>
                                         </constraints>
                                     </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="volumeLow" translatesAutoresizingMaskIntoConstraints="NO" id="MtJ-8X-otE" customClass="ACMTintImageView" customModule="office" customModuleProvider="target">
-                                        <rect key="frame" x="20" y="166" width="16" height="20"/>
+                                        <rect key="frame" x="24" y="168" width="16" height="16"/>
                                         <constraints>
+                                            <constraint firstAttribute="height" constant="16" id="N50-gj-zjj"/>
                                             <constraint firstAttribute="width" constant="16" id="YoL-Mo-QCp"/>
                                         </constraints>
                                     </imageView>
@@ -274,10 +276,10 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="Orc-hP-ajA" firstAttribute="top" secondItem="CyG-gS-HCC" secondAttribute="bottom" constant="20" id="6mM-ry-n4B"/>
-                                    <constraint firstItem="MtJ-8X-otE" firstAttribute="leading" secondItem="SV0-BS-9AS" secondAttribute="leading" constant="20" id="ENu-gg-gfI"/>
+                                    <constraint firstItem="MtJ-8X-otE" firstAttribute="leading" secondItem="SV0-BS-9AS" secondAttribute="leading" constant="24" id="ENu-gg-gfI"/>
                                     <constraint firstItem="3dy-ye-maY" firstAttribute="top" secondItem="CyG-gS-HCC" secondAttribute="bottom" constant="4" id="Et5-B0-uXi"/>
                                     <constraint firstItem="osM-Tz-2WN" firstAttribute="trailing" secondItem="CyG-gS-HCC" secondAttribute="trailing" id="FJq-zu-3Ef"/>
-                                    <constraint firstItem="SV0-BS-9AS" firstAttribute="trailing" secondItem="dBr-0v-zvj" secondAttribute="trailing" constant="20" id="Hnp-wq-D8O"/>
+                                    <constraint firstItem="SV0-BS-9AS" firstAttribute="trailing" secondItem="dBr-0v-zvj" secondAttribute="trailing" constant="24" id="Hnp-wq-D8O"/>
                                     <constraint firstItem="3dy-ye-maY" firstAttribute="leading" secondItem="CyG-gS-HCC" secondAttribute="leading" id="Nww-yF-WPb"/>
                                     <constraint firstItem="Orc-hP-ajA" firstAttribute="centerX" secondItem="hq5-jx-R0s" secondAttribute="centerX" id="QQs-MG-OGC"/>
                                     <constraint firstItem="XLZ-DE-T2Q" firstAttribute="leading" secondItem="SV0-BS-9AS" secondAttribute="leading" constant="30" id="QVj-pn-UeP"/>
@@ -289,9 +291,9 @@
                                     <constraint firstItem="CyG-gS-HCC" firstAttribute="top" secondItem="XLZ-DE-T2Q" secondAttribute="bottom" constant="16" id="axk-QS-MJd"/>
                                     <constraint firstItem="MtJ-8X-otE" firstAttribute="centerY" secondItem="qHO-YR-T6D" secondAttribute="centerY" constant="1" id="bQg-n9-P27"/>
                                     <constraint firstItem="qHO-YR-T6D" firstAttribute="top" secondItem="Orc-hP-ajA" secondAttribute="bottom" constant="8" id="fuf-Ou-i1a"/>
-                                    <constraint firstItem="qHO-YR-T6D" firstAttribute="leading" secondItem="MtJ-8X-otE" secondAttribute="trailing" constant="16" id="g2K-R8-kfl"/>
+                                    <constraint firstItem="qHO-YR-T6D" firstAttribute="leading" secondItem="MtJ-8X-otE" secondAttribute="trailing" constant="8" id="g2K-R8-kfl"/>
                                     <constraint firstItem="osM-Tz-2WN" firstAttribute="top" secondItem="CyG-gS-HCC" secondAttribute="bottom" constant="4" id="qg5-OM-x8Q"/>
-                                    <constraint firstItem="dBr-0v-zvj" firstAttribute="leading" secondItem="qHO-YR-T6D" secondAttribute="trailing" constant="16" id="rwF-Tx-2Lx"/>
+                                    <constraint firstItem="dBr-0v-zvj" firstAttribute="leading" secondItem="qHO-YR-T6D" secondAttribute="trailing" constant="8" id="rwF-Tx-2Lx"/>
                                     <constraint firstItem="SV0-BS-9AS" firstAttribute="bottom" secondItem="qHO-YR-T6D" secondAttribute="bottom" constant="20" id="tX1-cl-ria"/>
                                 </constraints>
                                 <viewLayoutGuide key="safeArea" id="SV0-BS-9AS"/>

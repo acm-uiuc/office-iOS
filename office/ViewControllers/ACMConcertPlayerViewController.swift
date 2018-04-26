@@ -35,6 +35,7 @@ final class ACMConcertPlayerViewController: UIViewController {
 
 
     lazy var acmConcertSocket = ACMConcertSocket(delegate: self)
+    lazy var acmAudioSession = ACMAudioSession(delegate: self)
     var timer: Timer?
     var duration = 1
     var progress = 1
@@ -96,6 +97,7 @@ final class ACMConcertPlayerViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         acmConcertSocket.setupSocket()
+        acmAudioSession.setUpVolumeListener()
         NotificationCenter.default.addObserver(
             acmConcertSocket,
             selector: #selector(ACMConcertSocket.setupSocket),
@@ -185,10 +187,11 @@ final class ACMConcertPlayerViewController: UIViewController {
 
     func update(colors: UIImageColors) {
         infoLabel.textColor = colors.primary
+
         progressBar.progressTintColor = colors.secondary
         progressBar.trackTintColor = colors.detail
-        volumeSlider.maximumTrackTintColor = colors.detail
-        volumeSlider.minimumTrackTintColor = colors.secondary
+        elapsedTimeLabel.textColor = colors.detail
+        remainingTimeLabel.textColor = colors.detail
 
         playPauseButton.tintColor = colors.secondary
         skipButton.tintColor = colors.secondary
@@ -202,11 +205,14 @@ final class ACMConcertPlayerViewController: UIViewController {
         } else {
             UIApplication.shared.statusBarStyle = .default
         }
-        
-        lowVolumeIcon.tintColor = colors.secondary
-        highVolumeIcon.tintColor = colors.secondary
-        
+        volumeSlider.maximumTrackTintColor = colors.detail
+        volumeSlider.minimumTrackTintColor = colors.secondary
 
+        lowVolumeIcon.tintColor = colors.detail
+        highVolumeIcon.tintColor = colors.detail
+
+        UIApplication.shared.statusBarStyle = .lightContent
+        
         let waveAlpha: CGFloat = 0.3
         let textViewAlpha = 1 - pow((1 - waveAlpha), 2)
 
@@ -249,6 +255,13 @@ extension UIColor {
     }
 }
 
+extension ACMConcertPlayerViewController: ACMAudioSessionDelegate {
+    public func acmAudioSession(_ acmAudioSession: ACMAudioSession, didReceiveVolumeEvent value: Int) {
+//        print("volume button event with value: \(value)")
+        acmConcertSocket.send(event: .volume(value))
+    }
+}
+
 extension ACMConcertPlayerViewController: ACMConcertSocketDelegate {
     func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceivePlayStateUpdate isPlaying: Bool, withState audioStatus: String) {
         let image = isPlaying ? pauseImage : playImage
@@ -273,7 +286,6 @@ extension ACMConcertPlayerViewController: ACMConcertSocketDelegate {
         if audioStatus == "State.NothingSpecial" {
             resetArtworkToDefault()
         }
-
     }
 
     func acmConcertSocket(_ acmConcertSocket: ACMConcertSocket, didReceiveVolumeUpdate newVolume: Int) {
