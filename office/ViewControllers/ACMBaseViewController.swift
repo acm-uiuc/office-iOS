@@ -25,14 +25,14 @@ extension ACMBaseViewController {
 
 // MARK: - UITextFieldDelegate
 extension ACMBaseViewController: UITextFieldDelegate {
-    @objc dynamic func nextReponder(current: UIResponder) -> UIResponder? {
+    @objc dynamic func nextResponder(current: UIResponder) -> UIResponder? {
         return nil
     }
 
     @objc dynamic func actionForFinalResponder() { }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if let nextReponder = nextReponder(current: textField) {
+        if let nextReponder = nextResponder(current: textField) {
             nextReponder.becomeFirstResponder()
         } else {
             textField.resignFirstResponder()
