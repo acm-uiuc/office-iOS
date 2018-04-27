@@ -197,8 +197,10 @@ final class ACMConcertPlayerViewController: UIViewController {
         elapsedTimeLabel.textColor = colors.secondary
         remainingTimeLabel.textColor = colors.secondary
         
-        if calculateColorBrightness(withColor: colors.background) < 0.5 {
+        if colors.background.isBright {
             UIApplication.shared.statusBarStyle = .lightContent
+        } else {
+            UIApplication.shared.statusBarStyle = .default
         }
         
         lowVolumeIcon.tintColor = colors.secondary
@@ -234,13 +236,16 @@ final class ACMConcertPlayerViewController: UIViewController {
             }
         }
     }
-    
-    func calculateColorBrightness(withColor color: UIColor) -> Double {
-        var white: CGFloat = 0
-        color.getWhite(&white, alpha: nil)
-        print(white)
-        return Double(white)
+}
 
+extension UIColor {
+    var isBright: Bool {
+        var white: CGFloat = 0
+        self.getWhite(&white, alpha: nil)
+        #if DEBUG
+            print(white)
+        #endif
+        return Double(white) < 0.5
     }
 }
 
