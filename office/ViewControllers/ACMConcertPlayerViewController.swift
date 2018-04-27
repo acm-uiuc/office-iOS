@@ -47,7 +47,7 @@ final class ACMConcertPlayerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let amount = 30
+        let amount = 25
         
         let horizontal = UIInterpolatingMotionEffect(keyPath: "center.x", type: .tiltAlongHorizontalAxis)
         horizontal.minimumRelativeValue = -amount
@@ -96,10 +96,6 @@ final class ACMConcertPlayerViewController: UIViewController {
                 volumeViewSlider = slider
             }
         }
-        
-//        volumeView.showsRouteButton = false
-//        volumeView.showsVolumeSlider = false
-
     }
 
     override func viewDidLayoutSubviews() {
@@ -214,11 +210,7 @@ final class ACMConcertPlayerViewController: UIViewController {
         elapsedTimeLabel.textColor = colors.secondary
         remainingTimeLabel.textColor = colors.secondary
         
-        if colors.background.isBright {
-            UIApplication.shared.statusBarStyle = .lightContent
-        } else {
-            UIApplication.shared.statusBarStyle = .default
-        }
+        UIApplication.shared.statusBarStyle = colors.background.isBright ? .lightContent : .default
         
         volumeSlider.maximumTrackTintColor = colors.detail
         volumeSlider.minimumTrackTintColor = colors.secondary
