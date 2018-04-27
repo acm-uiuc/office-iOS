@@ -245,7 +245,7 @@ extension UIColor {
         #if DEBUG
             print(white)
         #endif
-        return Double(white) < 0.5
+        return white < 0.5
     }
 }
 
