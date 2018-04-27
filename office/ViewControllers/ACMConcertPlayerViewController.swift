@@ -219,13 +219,12 @@ final class ACMConcertPlayerViewController: UIViewController {
         } else {
             UIApplication.shared.statusBarStyle = .default
         }
+        
         volumeSlider.maximumTrackTintColor = colors.detail
         volumeSlider.minimumTrackTintColor = colors.secondary
 
         lowVolumeIcon.tintColor = colors.detail
         highVolumeIcon.tintColor = colors.detail
-
-        UIApplication.shared.statusBarStyle = .lightContent
         
         let waveAlpha: CGFloat = 0.3
         let textViewAlpha = 1 - pow((1 - waveAlpha), 2)
