@@ -30,17 +30,18 @@ public final class ACMAudioSession: NSObject {
     }
 
     func listenForVolumeUpdate(){
-
         let audioSession = AVAudioSession.sharedInstance()
         do {
             try audioSession.setActive(true)
             
             observation = audioSession.observe(\AVAudioSession.outputVolume) { (foo, change) in
-//                print("new foo.string: \(foo.outputVolume)")
+                if ACMApplicationController.shared.originalVolume == -1 {
+                    ACMApplicationController.shared.originalVolume = Int(foo.outputVolume*100)
+                }
                 self.delegate?.acmAudioSession(self, didReceiveVolumeEvent: Int(foo.outputVolume*100))
             }
         } catch {
-            print("fuck")
+            print("failed to start observer")
         }
     }
 }

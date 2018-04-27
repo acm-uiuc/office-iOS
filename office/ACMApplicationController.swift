@@ -25,6 +25,7 @@ class ACMApplicationController {
         detail: UIColor.black
     )
     let keychain = Keychain(serviceName: "concert.acm.illinois.edu")
+    var originalVolume = -1
 
 }
 

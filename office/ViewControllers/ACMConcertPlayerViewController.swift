@@ -11,16 +11,16 @@ import SocketIO
 import MarqueeLabel
 import UIImageColors
 import YXWaveView
+import AVFoundation
+import MediaPlayer
 
 final class ACMConcertPlayerViewController: UIViewController {
     @IBOutlet weak var artworkImageView: UIImageView!
     @IBOutlet weak var artworkImageContainerView: UIView!
     @IBOutlet weak var backgroundArtworkImageView: UIImageView!
 
-
     @IBOutlet weak var waveView: YXWaveView!
     @IBOutlet weak var textContainerView: UIView!
-
 
     @IBOutlet weak var infoLabel: MarqueeLabel!
     @IBOutlet weak var progressBar: UIProgressView!
@@ -37,6 +37,8 @@ final class ACMConcertPlayerViewController: UIViewController {
     lazy var acmConcertSocket = ACMConcertSocket(delegate: self)
     lazy var acmAudioSession = ACMAudioSession(delegate: self)
     var timer: Timer?
+    var volumeView = MPVolumeView(frame: .zero)
+    var volumeViewSlider = UISlider()
     var duration = 1
     var progress = 1
     var pauseImage = #imageLiteral(resourceName: "pause")
@@ -83,10 +85,21 @@ final class ACMConcertPlayerViewController: UIViewController {
 
         volumeSlider.minimumValue = 0
         volumeSlider.maximumValue = 100
-//        volumeSlider.minimumValueImage = #imageLiteral(resourceName: "volumeLow")
-//        volumeSlider.maximumValueImage = #imageLiteral(resourceName: "volumeHigh")
         volumeSlider.tintColor = UIColor.gray
         UIApplication.shared.statusBarStyle = .default
+        
+        volumeView.clipsToBounds = true
+        artworkImageContainerView.addSubview(volumeView)
+        
+        for view in volumeView.subviews {
+            if let slider = view as? UISlider {
+                volumeViewSlider = slider
+            }
+        }
+        
+//        volumeView.showsRouteButton = false
+//        volumeView.showsVolumeSlider = false
+
     }
 
     override func viewDidLayoutSubviews() {
@@ -115,6 +128,7 @@ final class ACMConcertPlayerViewController: UIViewController {
         NotificationCenter.default.removeObserver(acmConcertSocket, name: .UIApplicationDidBecomeActive, object: nil)
         NotificationCenter.default.removeObserver(acmConcertSocket, name: .UIApplicationWillResignActive, object: nil)
         acmConcertSocket.teardownSocket()
+        self.volumeViewSlider.value = Float(ACMApplicationController.shared.originalVolume)
     }
 
     // MARK: Actions
@@ -259,6 +273,8 @@ extension ACMConcertPlayerViewController: ACMAudioSessionDelegate {
     public func acmAudioSession(_ acmAudioSession: ACMAudioSession, didReceiveVolumeEvent value: Int) {
 //        print("volume button event with value: \(value)")
         acmConcertSocket.send(event: .volume(value))
+        self.acmConcertSocket(acmConcertSocket, didReceiveVolumeUpdate: value)
+//        self.volumeSlider.value = Float(value)
     }
 }
 
@@ -267,7 +283,7 @@ extension ACMConcertPlayerViewController: ACMConcertSocketDelegate {
         let image = isPlaying ? pauseImage : playImage
         self.playPauseButton.setImage(image, for: .normal)
         #if DEBUG
-        print("audioStatus: \(audioStatus)")
+            print("audioStatus: \(audioStatus)")
         #endif
         
         if !isPlaying {
