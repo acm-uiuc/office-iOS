@@ -85,6 +85,7 @@ final class ACMConcertPlayerViewController: UIViewController {
 //        volumeSlider.minimumValueImage = #imageLiteral(resourceName: "volumeLow")
 //        volumeSlider.maximumValueImage = #imageLiteral(resourceName: "volumeHigh")
         volumeSlider.tintColor = UIColor.gray
+        UIApplication.shared.statusBarStyle = .default
     }
 
     override func viewDidLayoutSubviews() {
@@ -196,7 +197,11 @@ final class ACMConcertPlayerViewController: UIViewController {
         elapsedTimeLabel.textColor = colors.secondary
         remainingTimeLabel.textColor = colors.secondary
         
-        UIApplication.shared.statusBarStyle = .lightContent
+        if colors.background.isBright {
+            UIApplication.shared.statusBarStyle = .lightContent
+        } else {
+            UIApplication.shared.statusBarStyle = .default
+        }
         
         lowVolumeIcon.tintColor = colors.secondary
         highVolumeIcon.tintColor = colors.secondary
@@ -230,6 +235,17 @@ final class ACMConcertPlayerViewController: UIViewController {
                 return String(format: "-%d:%02d", min, sec)
             }
         }
+    }
+}
+
+extension UIColor {
+    var isBright: Bool {
+        var white: CGFloat = 0
+        self.getWhite(&white, alpha: nil)
+        #if DEBUG
+            print(white)
+        #endif
+        return white < 0.5
     }
 }
 
